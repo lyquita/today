@@ -1,5 +1,5 @@
 import { IonButton } from "@ionic/react";
-import './Today.scss';
+import './today.scss';
 
 const Today: React.FC = () => {
   return (
@@ -32,7 +32,7 @@ const Today: React.FC = () => {
           <p>Redesign the todo list home page</p>
         </div>
       </div>
-          <IonButton className="login">
+          <IonButton routerLink="/login">
           Log in
           </IonButton>
     </div>

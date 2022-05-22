@@ -1,0 +1,12 @@
+#login-page {
+    padding: 32px;
+    ion-header{
+        ion-toolbar{
+            ion-button{
+                margin: 0;
+                --box-shadow: none;
+                --background: white;
+            }
+        }
+    }
+}

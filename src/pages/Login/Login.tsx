@@ -1,15 +1,16 @@
 import { IonBackButton, IonButton, IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from "@ionic/react";
-import LoginComponent from "../components/Login/Login";
+import LoginComponent from "../../components/Login/Login";
+
+import './login.scss';
 
 const Login: React.FC = () => {
   return (
-    <IonPage>
-        <IonHeader>
+    <IonPage id="login-page">
+        <IonHeader className="ion-no-border">
             <IonToolbar>
                 <IonButton>
-                <IonBackButton text="back"></IonBackButton>
+                <IonBackButton icon="assets/icon/back.svg"></IonBackButton>
                 </IonButton>
-                <IonTitle>Login</IonTitle>
             </IonToolbar>
         </IonHeader>
       <IonContent fullscreen>
