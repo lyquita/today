@@ -1,7 +1,35 @@
 import { IonButton, IonCol, IonItem, IonList, IonRow, IonText } from "@ionic/react";
+import { useEffect, useState } from "react";
 import './today.scss';
+import { Storage } from "@capacitor/storage";
+import { getUsername } from "../../services/login";
+import { getStorage } from "../../services/localStorage";
 
 const Today: React.FC = () => {
+  const [username, setUsername] = useState<string>('');
+
+   useEffect(()=>{
+
+    getStorage('user_id').then(
+      res => 
+      getUsername(res.value).then(m => {
+        setUsername(m.data.username)
+        Storage.set({
+          key: 'username',
+          value: m.data.username
+        })
+      })
+      .catch(err => console.log(err))
+
+    )
+    
+   }, [username])
+
+   
+
+  
+   
+
   return (
     <div className="px-8" id="today-component">
       <div>

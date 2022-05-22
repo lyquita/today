@@ -1,4 +1,5 @@
-import axios from 'axios'
+import axios from 'axios';
+import { Storage } from '@capacitor/storage';
 
 export interface ILogin {
   username: string;
@@ -23,3 +24,5 @@ export async function getUsername(id:number):Promise<any> {
 
   return res
 }
+
+

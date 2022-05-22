@@ -1,14 +1,31 @@
 import { IonText } from "@ionic/react";
 import { useEffect, useState } from "react";
 import moment from 'moment';
+import { getStorage } from "../../services/localStorage";
+import { getUsername } from "../../services/login";
+import { Storage } from "@capacitor/storage";
 
 
 const Greeting:React.FC = () => {
     const [currentTime, setCurrentTime ] = useState<boolean>(false)
+    const [username, setUsername ] = useState<string>(''); 
     const [currentGreeting, setCurrentGreeting] = useState<string>('你好呀')
 
     useEffect(()=>{
-        GenerateGreeting()
+        GenerateGreeting();
+
+        getStorage('user_id').then(
+          res => 
+          getUsername(res.value).then(m => {
+            setUsername(m.data.username)
+            Storage.set({
+              key: 'username',
+              value: m.data.username
+            })
+          })
+          .catch(err => console.log(err))
+    
+        )
 
 
     },[])
@@ -37,7 +54,7 @@ const Greeting:React.FC = () => {
             <div >
                 <IonText>
                     <h2 className="text-2xl tracking-widest leading-10 font-thin">{currentGreeting}</h2>
-                    <h2 className="text-2xl tracking-widest font-bold">海里!</h2>
+                    <h2 className="text-2xl tracking-widest font-bold">{username}!</h2>
                 </IonText>
             </div>
             <div>

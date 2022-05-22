@@ -1,5 +1,9 @@
 import axios from 'axios';
+import { getStorage } from './services/localStorage';
+
+
 
 
 axios.defaults.baseURL = "https://api-blog.hireoo.fun/";
-axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('access_token');
+getStorage('access_token').then(res => axios.defaults.headers.common['Authorization'] = 'Bearer ' + res.value )
+
