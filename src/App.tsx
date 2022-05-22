@@ -27,10 +27,12 @@ import './theme/variables.css';
 import './theme/tailwind.css';
 import Login from './pages/Login/Login';
 import Todo from './pages/Todo/Todo';
+import { AppContextProvider } from './data/AppContext';
 
 setupIonicReact();
 
 const App: React.FC = () => (
+  <AppContextProvider>
   <IonApp>
     <IonReactRouter>
       <IonRouterOutlet>
@@ -49,6 +51,7 @@ const App: React.FC = () => (
       </IonRouterOutlet>
     </IonReactRouter>
   </IonApp>
+  </AppContextProvider>
 );
 
 export default App;

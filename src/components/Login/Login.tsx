@@ -1,14 +1,17 @@
 import { IonButton, IonCol, IonInput, IonItem, IonLabel, IonList, IonRow, IonText } from "@ionic/react"
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import './login.scss';
 import { postLogin } from "../../services/login";
 import jwt_decode from "jwt-decode";
 import { Storage } from '@capacitor/storage';
 import { useHistory } from "react-router";
+import { AppContext } from "../../data/AppContext";
+import { setIsLoggedInData } from "../../services/localStorage";
 
 
 const LoginComponent:React.FC = () => {
 
+    const {state, dispatch} = useContext(AppContext)
     const [username, setUsername] = useState<string>('')
     const [password, setPassword] = useState<string>('')
 
@@ -36,10 +39,16 @@ const LoginComponent:React.FC = () => {
                     key:'refresh_token',
                     value: res.data.refresh
                 });
-         
+                setIsLoggedInData(true)
 
                 setUsername('');
                 setPassword('');
+
+                //dispatch login status
+                dispatch({
+                    type:'set-is-login',
+                    loggedIn:true
+                })
 
                 history.push('/home')
             }
