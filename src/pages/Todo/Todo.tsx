@@ -7,6 +7,7 @@ import {
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
+import Addtodo from "../../components/Todo/AddTodo";
 import Todolist from "../../components/Todo/TodoList";
 import "./todo.scss";
 

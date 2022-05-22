@@ -2,11 +2,11 @@ import {
   IonCard,
   IonCheckbox,
   IonItem,
-  IonLabel,
   IonList,
   IonListHeader,
   IonText,
 } from "@ionic/react";
+import Addtodo from "./AddTodo";
 import "./todolist.scss";
 const Todolist: React.FC = () => {
   return (
@@ -46,7 +46,7 @@ const Todolist: React.FC = () => {
             </IonText>
           </IonItem>
         </IonList>
-        <IonList>
+        <IonList className="mb-5">
           <IonListHeader className="text-lg">完成</IonListHeader>
           <IonItem lines="none">
             <IonText>
@@ -54,6 +54,7 @@ const Todolist: React.FC = () => {
             </IonText>
           </IonItem>
         </IonList>
+        <Addtodo />
       </IonCard>
     </div>
   );
