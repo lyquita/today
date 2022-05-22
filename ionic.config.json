@@ -1,5 +1,7 @@
 {
   "name": "today",
-  "integrations": {},
+  "integrations": {
+    "capacitor": {}
+  },
   "type": "react"
 }
