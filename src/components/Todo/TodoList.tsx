@@ -17,21 +17,21 @@ const Todolist: React.FC = () => {
           <IonItem lines="none">
             <IonCheckbox className="h-5 w-5"></IonCheckbox>
             <IonText>
-              <p className="ml-3 w-40 font-light">
-                我想要测试一下最长的长度是多少还有几个？
+              <p className="ml-3 w-40 font-light text-sm">
+                我想要测试一下最长的长度是多dd
               </p>
             </IonText>
           </IonItem>
           <IonItem lines="none">
             <IonCheckbox></IonCheckbox>
             <IonText>
-              <p className="ml-3 w-40 font-light">我想要测试一</p>
+              <p className="ml-3 w-40 font-light text-sm">我想要测试一</p>
             </IonText>
           </IonItem>
           <IonItem lines="none">
             <IonCheckbox></IonCheckbox>
             <IonText>
-              <p className="ml-3 w-40 font-light">我想要测试一下最长的长度</p>
+              <p className="ml-3 w-40 font-light text-sm">我想要测试一下最长的长度</p>
             </IonText>
           </IonItem>
         </IonList>
@@ -40,7 +40,7 @@ const Todolist: React.FC = () => {
           <IonItem lines="none">
             <IonCheckbox></IonCheckbox>
             <IonText>
-              <p className="ml-3 w-40 font-light">
+              <p className="ml-3 w-40 font-light text-sm">
                 我想要测试一下最长的长度是多少还有几个？
               </p>
             </IonText>
@@ -50,7 +50,7 @@ const Todolist: React.FC = () => {
           <IonListHeader className="text-lg">完成</IonListHeader>
           <IonItem lines="none">
             <IonText>
-              <p className="w-40 font-light">我想要测试一下最长</p>
+              <p className="w-40 font-light text-sm">我想要测试一下最长</p>
             </IonText>
           </IonItem>
         </IonList>

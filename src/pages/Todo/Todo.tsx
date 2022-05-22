@@ -20,12 +20,12 @@ const Todo: React.FC = () => {
             <IonBackButton icon="assets/icon/back.svg"></IonBackButton>
           </IonButton>
           <IonTitle slot="end">
-            <span>5月21日</span>
+            <span className="text-xl">5月21日</span>
             <span className="text-sm ml-2">2022</span>
           </IonTitle>
         </IonToolbar>
       </IonHeader>
-      <IonContent>
+      <IonContent scrollY={false}>
         <Todolist />
       </IonContent>
     </IonPage>
