@@ -13,7 +13,7 @@ const Login: React.FC = () => {
                 </IonButton>
             </IonToolbar>
         </IonHeader>
-      <IonContent fullscreen>
+      <IonContent scrollY={false}>
         <LoginComponent />
       </IonContent>
     </IonPage>

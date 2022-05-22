@@ -4,8 +4,8 @@ import Today from '../../components/Home/Today';
 
 const Home: React.FC = () => {
   return (
-    <IonPage>
-      <IonContent fullscreen>
+    <IonPage >
+      <IonContent scrollY={false}>
             <Greeting />
             <Today />
       </IonContent>

@@ -6,7 +6,7 @@ const LoginComponent:React.FC = () => {
 
 
     return(
-        <div className="mt-10 flex flex-col items-center">
+        <div className="mt-10 flex flex-col items-center" id="login-component">
             <IonText>
                 <h2 className="text-3xl font-bold underline">Login</h2>
             </IonText>

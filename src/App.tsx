@@ -26,6 +26,7 @@ import './theme/variables.css';
 // Tailwind CSS 
 import './theme/tailwind.css';
 import Login from './pages/Login/Login';
+import Todo from './pages/Todo/Todo';
 
 setupIonicReact();
 
@@ -41,6 +42,9 @@ const App: React.FC = () => (
         </Route>
         <Route exact path="/login">
           <Login />
+        </Route>
+        <Route exact path="/todo">
+          <Todo />
         </Route>
       </IonRouterOutlet>
     </IonReactRouter>
