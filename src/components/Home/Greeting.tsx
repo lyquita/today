@@ -1,21 +1,28 @@
 import { IonText } from "@ionic/react";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import moment from "moment";
 import { getStorage } from "../../services/localStorage";
 import { getUsername } from "../../services/login";
 import { Storage } from "@capacitor/storage";
+import { AppContext } from "../../data/AppContext";
 
 const Greeting: React.FC = () => {
   const [currentTime, setCurrentTime] = useState<boolean>(false);
   const [username, setUsername] = useState<string>("");
   const [currentGreeting, setCurrentGreeting] = useState<string>("你好呀");
+  const { state, dispatch } = useContext(AppContext);
+  const [login, setLogin] = useState(state.user.isLoggedin);
+
 
   useEffect(() => {
     GenerateGreeting();
+  });
 
-    // get username by userid
-    getStorage("user_id").then((res) =>
-      getUsername(res.value)
+     // get username by userid
+     getStorage("user_id").then((res) =>
+     {
+       if(res.value !== null) {
+        getUsername(res.value)
         .then((m) => {
           setUsername(m.data.username);
           Storage.set({
@@ -24,13 +31,12 @@ const Greeting: React.FC = () => {
           });
         })
         .catch((err) => console.log(err))
-    );
+       }else{
+         setUsername('')
+       }
+     }
+   );
 
-
-
-
-
-  }, [username]);
 
   const GenerateGreeting = () => {
     const currentHour = moment().format("HH");
@@ -56,14 +62,14 @@ const Greeting: React.FC = () => {
           <h2 className="text-2xl tracking-widest leading-10 font-thin">
             {currentGreeting}
           </h2>
-          <h2 className="text-2xl tracking-widest font-bold">{username}!</h2>
+          <h2 className="text-2xl tracking-widest font-bold">{username}</h2>
         </IonText>
       </div>
       <div>
         {currentTime ? (
-          <img src="assets/img/day.svg" alt="" className="w-28 h28 ml-5" />
-        ) : (
           <img src="assets/img/moon.svg" alt="" className="w-28 h28 ml-5" />
+        ) : (
+          <img src="assets/img/day.svg" alt="" className="w-28 h28 ml-5" />
         )}
       </div>
     </div>

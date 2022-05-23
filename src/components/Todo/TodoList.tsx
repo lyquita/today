@@ -1,3 +1,4 @@
+import { Storage } from "@capacitor/storage";
 import {
   IonCard,
   IonCheckbox,
@@ -6,55 +7,100 @@ import {
   IonListHeader,
   IonText,
 } from "@ionic/react";
+import moment from "moment";
+import { useEffect, useState } from "react";
+import { getTodolistByDate, ITodo, postNewTodo } from "../../services/todolist";
 import Addtodo from "./AddTodo";
 import "./todolist.scss";
 const Todolist: React.FC = () => {
+  const [todos, setTodos] = useState<ITodo[]>([]);
+  const today = moment(new Date()).format("yyyy-MM-DD");
+  const month = moment(new Date()).format("MM");
+  const year = moment(new Date()).format("yyyy");
+  const [pending, setPending] = useState<ITodo[]>([]);
+  const [working, setWorking] = useState<ITodo[]>([]);
+  const [done, setDone] = useState<ITodo[]>([]);
+  const [username, setUsername] = useState<string>("");
+
+  useEffect(() => {
+    getTodolistByDate(today)
+      .then((res) => {
+        setTodos(res.data);
+        setPending(res.data.filter((todo: ITodo) => todo.status === "pending"));
+        setWorking(res.data.filter((todo: ITodo) => todo.status === "working"));
+        setDone(res.data.filter((todo: ITodo) => todo.status === "done"));
+      })
+      .catch((err) => console.log(err));
+
+    Storage.get({ key: "username" }).then((res) => {
+      if (res.value) {
+        setUsername(res.value);
+      }
+    });
+  }, []);
+
+  console.log("user", username);
+
+  function handleAddTodo(value: string) {
+    const params: ITodo = {
+      username: username,
+      created_date: today,
+      text: value,
+      status: "pending",
+      month: month,
+      year: year,
+    };
+
+    postNewTodo(params)
+      .then((res) =>
+        getTodolistByDate(today)
+          .then((res) => {
+            setTodos(res.data);
+            setPending(res.data.filter((todo: ITodo) => todo.status === "pending"));
+            setWorking(res.data.filter((todo: ITodo) => todo.status === "working"));
+            setDone(res.data.filter((todo: ITodo) => todo.status === "done"));
+          })
+          .catch((err) => console.log(err))
+      )
+      .catch((err) => console.log(err));
+  }
+
   return (
     <div id="todolist-component">
       <IonCard>
         <IonList>
           <IonListHeader className="text-lg">计划</IonListHeader>
-          <IonItem lines="none">
-            <IonCheckbox className="h-5 w-5"></IonCheckbox>
-            <IonText>
-              <p className="ml-3 w-40 font-light text-sm">
-                我想要测试一下最长的长度是多dd
-              </p>
-            </IonText>
-          </IonItem>
-          <IonItem lines="none">
-            <IonCheckbox></IonCheckbox>
-            <IonText>
-              <p className="ml-3 w-40 font-light text-sm">我想要测试一</p>
-            </IonText>
-          </IonItem>
-          <IonItem lines="none">
-            <IonCheckbox></IonCheckbox>
-            <IonText>
-              <p className="ml-3 w-40 font-light text-sm">我想要测试一下最长的长度</p>
-            </IonText>
-          </IonItem>
+          {pending.map((item) => (
+            <IonItem lines="none" key={item.id}>
+              <IonCheckbox className="h-5 w-5"></IonCheckbox>
+              <IonText>
+                <p className="ml-3 w-40 font-light text-sm">{item.text}</p>
+              </IonText>
+            </IonItem>
+          ))}
         </IonList>
         <IonList>
           <IonListHeader className="text-lg">正在处理</IonListHeader>
-          <IonItem lines="none">
-            <IonCheckbox></IonCheckbox>
-            <IonText>
-              <p className="ml-3 w-40 font-light text-sm">
-                我想要测试一下最长的长度是多少还有几个？
-              </p>
-            </IonText>
-          </IonItem>
+          {working.map((item) => (
+            <IonItem lines="none" key={item.id}>
+              <IonCheckbox></IonCheckbox>
+              <IonText>
+                <p className="ml-3 w-40 font-light text-sm">{item.text}</p>
+              </IonText>
+            </IonItem>
+          ))}
         </IonList>
         <IonList className="mb-5">
           <IonListHeader className="text-lg">完成</IonListHeader>
-          <IonItem lines="none">
-            <IonText>
-              <p className="w-40 font-light text-sm">我想要测试一下最长</p>
-            </IonText>
-          </IonItem>
+          {done.map((item) => (
+            <IonItem lines="none" key={item.id}>
+              <IonText>
+                <p className="w-40 font-light text-sm">{item.text}</p>
+              </IonText>
+            </IonItem>
+          ))}
         </IonList>
-        <Addtodo />
+        <Addtodo handleAddTodo={handleAddTodo} />
       </IonCard>
     </div>
   );
