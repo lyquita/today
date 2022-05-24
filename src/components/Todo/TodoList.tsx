@@ -1,5 +1,7 @@
 import { Storage } from "@capacitor/storage";
 import {
+  CheckboxChangeEventDetail,
+  CheckboxCustomEvent,
   IonCard,
   IonCheckbox,
   IonItem,
@@ -9,7 +11,12 @@ import {
 } from "@ionic/react";
 import moment from "moment";
 import { useEffect, useState } from "react";
-import { getTodolistByDate, ITodo, postNewTodo } from "../../services/todolist";
+import {
+  getTodolistByDate,
+  ITodo,
+  postNewTodo,
+  updateTodo,
+} from "../../services/todolist";
 import Addtodo from "./AddTodo";
 import "./todolist.scss";
 const Todolist: React.FC = () => {
@@ -21,14 +28,13 @@ const Todolist: React.FC = () => {
   const [working, setWorking] = useState<ITodo[]>([]);
   const [done, setDone] = useState<ITodo[]>([]);
   const [username, setUsername] = useState<string>("");
+  const [checked, setChecked] = useState<boolean>(false);
+  const [inputValue, setInputvalue] = useState<string>("");
 
   useEffect(() => {
     getTodolistByDate(today)
       .then((res) => {
-        setTodos(res.data);
-        setPending(res.data.filter((todo: ITodo) => todo.status === "pending"));
-        setWorking(res.data.filter((todo: ITodo) => todo.status === "working"));
-        setDone(res.data.filter((todo: ITodo) => todo.status === "done"));
+        setRes(res);
       })
       .catch((err) => console.log(err));
 
@@ -38,8 +44,6 @@ const Todolist: React.FC = () => {
       }
     });
   }, []);
-
-  console.log("user", username);
 
   function handleAddTodo(value: string) {
     const params: ITodo = {
@@ -55,14 +59,38 @@ const Todolist: React.FC = () => {
       .then((res) =>
         getTodolistByDate(today)
           .then((res) => {
-            setTodos(res.data);
-            setPending(res.data.filter((todo: ITodo) => todo.status === "pending"));
-            setWorking(res.data.filter((todo: ITodo) => todo.status === "working"));
-            setDone(res.data.filter((todo: ITodo) => todo.status === "done"));
+            setRes(res);
+            setInputvalue("");
           })
           .catch((err) => console.log(err))
       )
       .catch((err) => console.log(err));
+  }
+
+  function handleChecked(value: number) {
+    let checkedTodo = todos.find((X) => X.id === value);
+
+    if (checkedTodo) {
+      checkedTodo = { ...checkedTodo, status: "done" };
+      updateTodo(value, checkedTodo)
+        .then((res) =>
+          getTodolistByDate(today)
+            .then((res) => {
+              setRes(res);
+              setInputvalue("");
+            })
+            .catch((err) => console.log(err))
+        )
+        .catch((err) => console.log(err));
+    }
+  }
+
+
+  function setRes(res: any) {
+    setTodos(res.data);
+    setPending(res.data.filter((todo: ITodo) => todo.status === "pending"));
+    setWorking(res.data.filter((todo: ITodo) => todo.status === "working"));
+    setDone(res.data.filter((todo: ITodo) => todo.status === "done"));
   }
 
   return (
@@ -72,7 +100,11 @@ const Todolist: React.FC = () => {
           <IonListHeader className="text-lg">计划</IonListHeader>
           {pending.map((item) => (
             <IonItem lines="none" key={item.id}>
-              <IonCheckbox className="h-5 w-5"></IonCheckbox>
+              <IonCheckbox
+                className="h-5 w-5"
+                checked={checked}
+                onIonChange={() => handleChecked(item.id!)}
+              ></IonCheckbox>
               <IonText>
                 <p className="ml-3 w-40 font-light text-sm">{item.text}</p>
               </IonText>
@@ -100,7 +132,11 @@ const Todolist: React.FC = () => {
             </IonItem>
           ))}
         </IonList>
-        <Addtodo handleAddTodo={handleAddTodo} />
+        <Addtodo
+          handleAddTodo={handleAddTodo}
+          inputValue={inputValue}
+          setInputvalue={setInputvalue}
+        />
       </IonCard>
     </div>
   );
