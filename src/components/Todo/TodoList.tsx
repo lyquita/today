@@ -1,21 +1,14 @@
 import { Storage } from "@capacitor/storage";
 import {
-  CheckboxChangeEventDetail,
-  CheckboxCustomEvent,
+  IonActionSheet,
   IonButton,
   IonCard,
   IonCheckbox,
-  IonCol,
-  IonContent,
-  IonGrid,
   IonIcon,
   IonItem,
   IonLabel,
   IonList,
   IonListHeader,
-  IonPopover,
-  IonRow,
-  IonText,
 } from "@ionic/react";
 import moment from "moment";
 import { useEffect, useState } from "react";
@@ -30,11 +23,9 @@ import {
 import Addtodo from "./AddTodo";
 import "./todolist.scss";
 
-
 interface RouteParams {
-  date: string
+  date: string;
 }
-
 
 const Todolist: React.FC = () => {
   const [todos, setTodos] = useState<ITodo[]>([]);
@@ -46,25 +37,16 @@ const Todolist: React.FC = () => {
   const [username, setUsername] = useState<string>("");
   const [checked, setChecked] = useState<boolean>(false);
   const [inputValue, setInputvalue] = useState<string>("");
-  const [today, setToday] = useState<string>(moment(new Date()).format("yyyy-MM-DD"))
-  const [pendingPopoverState, setPendingShowPopover] = useState({
-    showPopover: false,
-    event: undefined,
-  });
-  const [workingPopoverState, setWorkingShowPopover] = useState({
-    showPopover: false,
-    event: undefined,
-  });
+  const [today, setToday] = useState<string>(
+    moment(new Date()).format("yyyy-MM-DD")
+  );
+  const [showActionSheet, setShowActionSheet] = useState(false);
+  const [targetTodo, setTargetTodo] = useState<number>(0);
 
-  const [donePopoverState, setDoneShowPopover] = useState({
-    showPopover: false,
-    event: undefined,
-  });
 
-  const params:RouteParams = useParams()
-  
+  const params: RouteParams = useParams();
+
   useEffect(() => {
-
     getTodolistByDate(params.date)
       .then((res) => {
         setRes(res);
@@ -76,11 +58,7 @@ const Todolist: React.FC = () => {
         setUsername(res.value);
       }
     });
-
-    
   }, []);
-
-
 
   function handleAddTodo(value: string) {
     const params: ITodo = {
@@ -169,6 +147,11 @@ const Todolist: React.FC = () => {
     }
   }
 
+  function handleActionsheet(e: any) {
+    setShowActionSheet(true);
+    setTargetTodo(e)
+  }
+
   function setRes(res: any) {
     setTodos(res.data);
     setPending(res.data.filter((todo: ITodo) => todo.status === "pending"));
@@ -192,27 +175,12 @@ const Todolist: React.FC = () => {
                 <p className="ml-3 w-40 font-light text-sm">{item.text}</p>
               </IonLabel>
               <IonButton
-                onClick={(e: any) => {
-                  e.persist();
-                  setPendingShowPopover({ showPopover: true, event: e });
+                onClick={() => {
+                  handleActionsheet(item.id);
                 }}
               >
                 <IonIcon icon="assets/icon/edit.svg"></IonIcon>
               </IonButton>
-              <IonPopover
-                event={pendingPopoverState.event}
-                isOpen={pendingPopoverState.showPopover}
-                onDidDismiss={() =>
-                  setPendingShowPopover({ showPopover: false, event: undefined })
-                }
-              >
-                <IonButton onClick={() => handleWorking(item.id!)}>
-                  <IonIcon icon="assets/icon/down.svg" />
-                </IonButton>
-                <IonButton onClick={() => handleRemove(item.id!)}>
-                  <IonIcon icon="assets/icon/delete.svg" />
-                </IonButton>
-              </IonPopover>
             </IonItem>
           ))}
         </IonList>
@@ -229,27 +197,12 @@ const Todolist: React.FC = () => {
                 <p className="ml-3 w-40 font-light text-sm">{item.text}</p>
               </IonLabel>
               <IonButton
-                onClick={(e: any) => {
-                  e.persist();
-                  setWorkingShowPopover({ showPopover: true, event: e });
+                onClick={() => {
+                  handleActionsheet(item.id);
                 }}
               >
                 <IonIcon icon="assets/icon/edit.svg"></IonIcon>
               </IonButton>
-              <IonPopover
-                event={workingPopoverState.event}
-                isOpen={workingPopoverState.showPopover}
-                onDidDismiss={() =>
-                  setWorkingShowPopover({ showPopover: false, event: undefined })
-                }
-              >
-                <IonButton onClick={() => handlePending(item.id!)}>
-                  <IonIcon icon="assets/icon/up.svg" />
-                </IonButton>
-                <IonButton onClick={() => handleRemove(item.id!)}>
-                  <IonIcon icon="assets/icon/delete.svg" />
-                </IonButton>
-              </IonPopover>
             </IonItem>
           ))}
         </IonList>
@@ -257,31 +210,16 @@ const Todolist: React.FC = () => {
           <IonListHeader className="text-lg">完成</IonListHeader>
           {done.map((item) => (
             <IonItem lines="none" key={item.id}>
-               <IonLabel>
+              <IonLabel>
                 <p className="ml-3 w-40 font-light text-sm">{item.text}</p>
               </IonLabel>
               <IonButton
-                onClick={(e: any) => {
-                  e.persist();
-                  setDoneShowPopover({ showPopover: true, event: e });
+                onClick={() => {
+                  handleActionsheet(item.id);
                 }}
               >
                 <IonIcon icon="assets/icon/edit.svg"></IonIcon>
               </IonButton>
-              <IonPopover
-                event={donePopoverState.event}
-                isOpen={donePopoverState.showPopover}
-                onDidDismiss={() =>
-                  setDoneShowPopover({ showPopover: false, event: undefined })
-                }
-              >
-                <IonButton onClick={() => handleWorking(item.id!)}>
-                  <IonIcon icon="assets/icon/up.svg" />
-                </IonButton>
-                <IonButton onClick={() => handleRemove(item.id!)}>
-                  <IonIcon icon="assets/icon/delete.svg" />
-                </IonButton>
-              </IonPopover>
             </IonItem>
           ))}
         </IonList>
@@ -291,6 +229,44 @@ const Todolist: React.FC = () => {
           setInputvalue={setInputvalue}
         />
       </IonCard>
+      <IonActionSheet
+        isOpen={showActionSheet}
+        onDidDismiss={() => setShowActionSheet(false)}
+        cssClass='action-sheet-class'
+        buttons={[
+          {
+            text: "计划状态",
+            data: "Data value",
+            handler: () => {
+              handlePending(targetTodo)
+            },
+          },
+          {
+            text: "处理中",
+            data: 10,
+            handler: () => {
+              handleWorking(targetTodo)
+            },
+          },
+          {
+            text: "编辑",
+            handler: () => {
+              console.log("Favorite clicked");
+            },
+          },
+          {
+            text: "删除",
+            role: "destructive",
+            id: "delete-button",
+            data: {
+              type: "delete",
+            },
+            handler: () => {
+              handleRemove(targetTodo)
+            },
+          },
+        ]}
+      ></IonActionSheet>
     </div>
   );
 };

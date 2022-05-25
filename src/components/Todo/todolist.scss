@@ -21,6 +21,7 @@
 
         ion-label{
           margin-left: 0.5rem;
+          white-space: normal;
         }
         ion-checkbox {
           background: #ffffff;
@@ -76,4 +77,14 @@ ion-popover{
     padding: 1rem ;
   }
 
+
+  
+}
+.action-sheet-class  .action-sheet-group:first-of-type {
+  
+  border-radius: 20px 20px 0 0;
+  
+  #delete-button{
+    background: #fdf6f0;
+  }
 }
