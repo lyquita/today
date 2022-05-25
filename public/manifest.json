@@ -1,21 +1,21 @@
 {
-  "short_name": "Ionic App",
-  "name": "My Ionic App",
+  "short_name": "Today",
+  "name": "Today",
   "icons": [
     {
-      "src": "assets/icon/favicon.png",
+      "src": "assets/img/apple-touch-icon.png",
       "sizes": "64x64 32x32 24x24 16x16",
       "type": "image/x-icon"
     },
     {
-      "src": "assets/icon/icon.png",
+      "src": "assets/img/apple-touch-icon.png",
       "type": "image/png",
       "sizes": "512x512",
       "purpose": "maskable"
     }
   ],
   "start_url": ".",
-  "display": "standalone",
-  "theme_color": "#ffffff",
+  "display": "fullscreen",
+  "theme_color": "#fff",
   "background_color": "#ffffff"
 }

@@ -80,7 +80,7 @@ const Today: React.FC = () => {
         <div className="h-3 w-16 bg-[#FBD8D4] top-6 -z-10"></div>
       </div>
       <IonList>
-        <IonItem lines="none" routerLink="/todo">
+        <IonItem lines="none" routerLink={`/todo/${today}`}>
           <IonRow>
             <IonCol>
               <IonText>

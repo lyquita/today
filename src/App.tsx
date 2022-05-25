@@ -28,6 +28,7 @@ import './theme/tailwind.css';
 import Login from './pages/Login/Login';
 import Todo from './pages/Todo/Todo';
 import { AppContextProvider } from './data/AppContext';
+import MonthlyTodoPage from './pages/MonthlyTodo/MonthlyTodoPage';
 
 setupIonicReact();
 
@@ -45,8 +46,11 @@ const App: React.FC = () => (
         <Route exact path="/login">
           <Login />
         </Route>
-        <Route exact path="/todo">
+        <Route exact path="/todo/:date">
           <Todo />
+        </Route>
+        <Route exact path="/monthly-todo">
+          <MonthlyTodoPage />
         </Route>
       </IonRouterOutlet>
     </IonReactRouter>

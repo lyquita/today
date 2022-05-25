@@ -31,6 +31,10 @@ import Addtodo from "./AddTodo";
 import "./todolist.scss";
 
 
+interface RouteParams {
+  date: string
+}
+
 
 const Todolist: React.FC = () => {
   const [todos, setTodos] = useState<ITodo[]>([]);
