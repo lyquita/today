@@ -50,10 +50,9 @@ const Today: React.FC = () => {
       setTodoAmount(pending)
       setInprogressAmount(working)
       setDoneAmount(done)
-
     })
     .catch((err) => console.log(err));
-  }, []);
+  }, [login]);
 
   const handleLogout = () => {
     dispatch({

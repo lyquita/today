@@ -9,7 +9,7 @@ const Login: React.FC = () => {
         <IonHeader className="ion-no-border">
             <IonToolbar>
                 <IonButton>
-                <IonBackButton icon="assets/icon/back.svg"></IonBackButton>
+                <IonBackButton icon="assets/icon/back.svg" text=''></IonBackButton>
                 </IonButton>
             </IonToolbar>
         </IonHeader>

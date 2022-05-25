@@ -5,8 +5,8 @@
     ion-card {
         border-radius: 20px;
         background: #fdf6f0;
-        padding: 2rem 0;
-        height: 250px;
+        padding: 0.5rem 0;
+        height: 270px;
         width: 40%;
         ion-text{
             font-size: medium;
@@ -16,12 +16,13 @@
 
         ion-list{
             background: #fdf6f0;
-            height: 150px;
+            height: 200px;
             overflow: hidden;
 
             ion-item{
             --background: #fdf6f0;
             font-size: smaller;
+            height: 42px;
             }
         }
 

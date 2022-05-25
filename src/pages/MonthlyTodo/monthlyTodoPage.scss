@@ -3,6 +3,12 @@
     ion-header{
         ion-toolbar{
             --background: white;
+
+
+            ion-item{
+                --height: 38px;
+            }
+
             ion-button{
                 margin: 0;
                 --box-shadow: none;

@@ -47,8 +47,6 @@ const MonthlyTodoContent = () => {
         ) 
 
     },[])
- 
-console.log('list', listData);
 
 
     return(

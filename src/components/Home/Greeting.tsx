@@ -16,26 +16,31 @@ const Greeting: React.FC = () => {
 
   useEffect(() => {
     GenerateGreeting();
+
+
+      // get username by userid
+      getStorage("user_id").then((res) =>
+      {
+        if(res.value !== null) {
+         getUsername(res.value)
+         .then((m) => {
+           setUsername(m.data.username);
+           Storage.set({
+             key: "username",
+             value: m.data.username,
+           });
+         })
+         .catch((err) => console.log(err))
+        }else{
+          setUsername('')
+        }
+      }
+    );
+
+
   });
 
-     // get username by userid
-     getStorage("user_id").then((res) =>
-     {
-       if(res.value !== null) {
-        getUsername(res.value)
-        .then((m) => {
-          setUsername(m.data.username);
-          Storage.set({
-            key: "username",
-            value: m.data.username,
-          });
-        })
-        .catch((err) => console.log(err))
-       }else{
-         setUsername('')
-       }
-     }
-   );
+   
 
 
   const GenerateGreeting = () => {

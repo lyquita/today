@@ -39,7 +39,7 @@ const Todo: React.FC = () => {
       <IonHeader className="ion-no-border">
         <IonToolbar>
           <IonButton>
-            <IonBackButton icon="assets/icon/back.svg"></IonBackButton>
+            <IonBackButton icon="assets/icon/back.svg" text=''></IonBackButton>
           </IonButton>
           <IonTitle slot="end">
             <span className="text-xl">{month}月{day}日</span>
@@ -47,7 +47,7 @@ const Todo: React.FC = () => {
           </IonTitle>
         </IonToolbar>
       </IonHeader>
-      <IonContent scrollY={false}>
+      <IonContent >
         <MonthlyTodoButton />
         <Todolist />
       </IonContent>

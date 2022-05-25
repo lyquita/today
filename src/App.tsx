@@ -1,5 +1,5 @@
 import { Redirect, Route } from 'react-router-dom';
-import { IonApp, IonRouterOutlet, setupIonicReact } from '@ionic/react';
+import { IonApp, IonRouterOutlet, isPlatform, setupIonicReact } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import Home from './pages/Home/Home';
 
@@ -30,28 +30,26 @@ import Todo from './pages/Todo/Todo';
 import { AppContextProvider } from './data/AppContext';
 import MonthlyTodoPage from './pages/MonthlyTodo/MonthlyTodoPage';
 
-setupIonicReact();
+
+
+setupIonicReact({
+  animated: false,
+  backButtonText:'',
+  mode:'md',
+});
 
 const App: React.FC = () => (
   <AppContextProvider>
   <IonApp>
     <IonReactRouter>
       <IonRouterOutlet>
-        <Route exact path="/home">
-          <Home />
-        </Route>
+        <Route exact path="/home" component={Home} />
         <Route exact path="/">
           <Redirect to="/home" />
         </Route>
-        <Route exact path="/login">
-          <Login />
-        </Route>
-        <Route exact path="/todo/:date">
-          <Todo />
-        </Route>
-        <Route exact path="/monthly-todo">
-          <MonthlyTodoPage />
-        </Route>
+        <Route exact path="/login" component={Login} />
+        <Route exact path="/todo/:date" component={Todo} />
+        <Route exact path="/monthly-todo" component={MonthlyTodoPage} />
       </IonRouterOutlet>
     </IonReactRouter>
   </IonApp>

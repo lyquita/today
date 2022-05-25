@@ -80,8 +80,6 @@ const Todolist: React.FC = () => {
     
   }, []);
 
- console.log('todo', todos);
- 
 
 
   function handleAddTodo(value: string) {
