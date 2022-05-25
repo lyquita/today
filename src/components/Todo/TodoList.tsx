@@ -19,6 +19,7 @@ import {
 } from "@ionic/react";
 import moment from "moment";
 import { useEffect, useState } from "react";
+import { useParams } from "react-router";
 import {
   deleteTodo,
   getTodolistByDate,
@@ -28,9 +29,11 @@ import {
 } from "../../services/todolist";
 import Addtodo from "./AddTodo";
 import "./todolist.scss";
+
+
+
 const Todolist: React.FC = () => {
   const [todos, setTodos] = useState<ITodo[]>([]);
-  const today = moment(new Date()).format("yyyy-MM-DD");
   const month = moment(new Date()).format("MM");
   const year = moment(new Date()).format("yyyy");
   const [pending, setPending] = useState<ITodo[]>([]);
@@ -39,6 +42,7 @@ const Todolist: React.FC = () => {
   const [username, setUsername] = useState<string>("");
   const [checked, setChecked] = useState<boolean>(false);
   const [inputValue, setInputvalue] = useState<string>("");
+  const [today, setToday] = useState<string>(moment(new Date()).format("yyyy-MM-DD"))
   const [pendingPopoverState, setPendingShowPopover] = useState({
     showPopover: false,
     event: undefined,
@@ -53,8 +57,11 @@ const Todolist: React.FC = () => {
     event: undefined,
   });
 
+  const params:RouteParams = useParams()
+  
   useEffect(() => {
-    getTodolistByDate(today)
+
+    getTodolistByDate(params.date)
       .then((res) => {
         setRes(res);
       })
@@ -65,7 +72,13 @@ const Todolist: React.FC = () => {
         setUsername(res.value);
       }
     });
+
+    
   }, []);
+
+ console.log('todo', todos);
+ 
+
 
   function handleAddTodo(value: string) {
     const params: ITodo = {
