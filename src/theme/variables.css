@@ -234,3 +234,18 @@ http://ionicframework.com/docs/theming/ */
     --ion-card-background: #1e1e1e;
   }
 }
+
+
+
+.my-content::part(scroll){
+  display: flex;
+  flex-direction: column;
+};
+
+
+.modal-button {
+  --background:white;
+  --color: black;
+  --box-shadow: none;
+}
+

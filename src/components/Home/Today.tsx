@@ -101,7 +101,7 @@ const Today: React.FC = () => {
             </IonCol>
           </IonRow>
         </IonItem>
-        <IonItem lines="none">
+        <IonItem lines="none" routerLink="/backlog">
           <IonText>
             <h2 className="font-bold">Backlog</h2>
             <p>Redesign the todo list home page</p>

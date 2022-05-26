@@ -1,0 +1,16 @@
+#addbacklog{
+        border: 0.5px solid black;
+        padding: 0 0.5rem;
+        margin-top: 2rem;
+        margin: 2rem 1.5rem 0 1.5rem;
+        background-color: white;
+        border-radius: 25px;
+        ion-button {
+            --background: #fcd8d4;
+            --box-shadow: none;
+            --border-radius: 20px;
+            --color: black;
+            font-size: 14px;
+            font-weight: 400;
+          }
+}

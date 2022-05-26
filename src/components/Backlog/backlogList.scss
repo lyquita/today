@@ -1,0 +1,43 @@
+#backlog-list {
+  display: flex;
+  justify-content: center;
+  ion-button {
+    --background: white;
+    --box-shadow: none;
+    --border-radius: 20px;
+    --color: black;
+    font-size: 14px;
+    font-weight: 400;
+    height: 25px;
+  }
+
+  ion-card {
+    border-radius: 20px;
+    background: #fdf6f0;
+    padding: 2rem 1rem;
+
+    ion-list {
+      background: #fdf6f0;
+
+      ion-item {
+        --background: #fdf6f0;
+        --inner-padding-end: 0px;
+        display: flex;
+        width: 100%;
+        height: 60px;
+        justify-content: space-between;
+
+        ion-text{
+            font-size: small;
+            width: 300px;
+        }
+      }
+    }
+  }
+
+  .my-button{
+    --background:white;
+    --color: black;
+    --box-shadow: none;
+  }
+}

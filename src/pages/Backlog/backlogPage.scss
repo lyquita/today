@@ -1,0 +1,19 @@
+#backlog-page{
+    padding: 20px;
+    ion-header{
+        ion-toolbar{
+            --background: white;
+            ion-button{
+                margin: 0;
+                --box-shadow: none;
+                --background: white;
+                color: black;
+                ion-back-button{
+                    --color: black;
+                }
+            }
+
+        }
+    }
+    
+}
