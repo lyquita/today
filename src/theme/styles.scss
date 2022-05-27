@@ -1,0 +1,25 @@
+
+.calendar-popover {
+    --background: white;;
+      --width: 170px;
+  
+    &::part(content){
+        width: auto;
+        position: static;
+    }
+
+    ion-button{
+        --background: white;
+        --color: black;
+        --box-shadow: none;
+    }
+
+    .save{
+        --background: #fcd8d4;
+        --border-radius: 20px;
+        width: 75px;
+        margin: 0 auto;
+    }
+  
+    
+  }

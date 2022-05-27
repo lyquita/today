@@ -215,7 +215,7 @@ const Todolist: React.FC = () => {
                 </>
               ) : (
                 <div className="flex w-full">
-                  <IonInput placeholder={item.text} onIonChange={e=> setEditInputValue(e.detail.value!)} value={editInputValue}></IonInput>
+                  <IonInput placeholder={item.text} onIonChange={e=> setEditInputValue(e.detail.value!)} value={editInputValue} required></IonInput>
                   <IonButton onClick={()=> handleEdit(item.id!)}>
                     <IonIcon icon="assets/icon/save.svg"></IonIcon>
                   </IonButton>
@@ -248,7 +248,7 @@ const Todolist: React.FC = () => {
                 </>
               ) : (
                 <div className="flex w-full">
-                  <IonInput placeholder={item.text} onIonChange={e=> setEditInputValue(e.detail.value!)} value={editInputValue}></IonInput>
+                  <IonInput placeholder={item.text} onIonChange={e=> setEditInputValue(e.detail.value!)} value={editInputValue} required></IonInput>
                   <IonButton onClick={()=> handleEdit(item.id!)}>
                     <IonIcon icon="assets/icon/save.svg"></IonIcon>
                   </IonButton>
@@ -276,7 +276,7 @@ const Todolist: React.FC = () => {
                 </>
               ) : (
                 <div className="flex w-full">
-                  <IonInput placeholder={item.text} onIonChange={e=> setEditInputValue(e.detail.value!)} value={editInputValue}></IonInput>
+                  <IonInput placeholder={item.text} onIonChange={e=> setEditInputValue(e.detail.value!)} value={editInputValue} required></IonInput>
                   <IonButton onClick={()=> handleEdit(item.id!)}>
                     <IonIcon icon="assets/icon/save.svg"></IonIcon>
                   </IonButton>

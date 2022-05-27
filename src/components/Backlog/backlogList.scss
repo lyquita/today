@@ -32,10 +32,17 @@
             font-size: small;
             width: 300px;
         }
+        ion-input{
+          border: 0.5px solid blue;
+          --background: white;
+          padding: 0 0.5rem;
+        }
 
         
       }
     }
   }
+
+  
 
 }
