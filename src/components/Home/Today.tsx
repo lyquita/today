@@ -75,7 +75,7 @@ const Today: React.FC = () => {
   return (
     <div className="px-8" id="today-component">
       <div>
-        <h2 className="text-2xl">Today</h2>
+        <h2 className="text-2xl">今天</h2>
         <div className="h-3 w-16 bg-[#FBD8D4] top-6 -z-10"></div>
       </div>
       <IonList>
@@ -84,36 +84,36 @@ const Today: React.FC = () => {
             <IonCol>
               <IonText>
                 <p className="font-bold">{todoAmount}</p>
-                <p>Todo</p>
+                <p>计划</p>
               </IonText>
             </IonCol>
             <IonCol>
               <IonText>
                 <p className="font-bold">{inprogressAmount}</p>
-                <p>In progress</p>
+                <p>正在处理</p>
               </IonText>
             </IonCol>
             <IonCol>
               <IonText>
                 <p className="font-bold">{doneAmount}</p>
-                <p>Done</p>
+                <p>完成</p>
               </IonText>
             </IonCol>
           </IonRow>
         </IonItem>
         <IonItem lines="none" routerLink="/backlog">
           <IonText>
-            <h2 className="font-bold">Backlog</h2>
+            <h2 className="font-bold">收集清单</h2>
             <p>Redesign the todo list home page</p>
           </IonText>
         </IonItem>
       </IonList>
       {login ? (
         <IonButton routerLink="/login" onClick={handleLogout}>
-          Log Out
+          退出
         </IonButton>
       ) : (
-        <IonButton routerLink="/login">Log In</IonButton>
+        <IonButton routerLink="/login">登录</IonButton>
       )}
     </div>
   );

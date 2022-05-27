@@ -9,6 +9,7 @@
     font-size: 14px;
     font-weight: 400;
     height: 25px;
+    margin-right: 0.5rem;
   }
 
   ion-card {
@@ -31,13 +32,10 @@
             font-size: small;
             width: 300px;
         }
+
+        
       }
     }
   }
 
-  .my-button{
-    --background:white;
-    --color: black;
-    --box-shadow: none;
-  }
 }

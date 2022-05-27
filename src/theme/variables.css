@@ -240,10 +240,10 @@ http://ionicframework.com/docs/theming/ */
 .my-content::part(scroll){
   display: flex;
   flex-direction: column;
-};
+}
 
 
-.modal-button {
+.modal-button{
   --background:white;
   --color: black;
   --box-shadow: none;

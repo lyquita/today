@@ -31,41 +31,57 @@ const BacklogList = () => {
               测试 你说呢我这个 是一个测试而已 如果很长的样式如何？
             </IonText>
             <IonButton
+            >
+              <IonIcon icon="assets/icon/edit.svg"></IonIcon>
+            </IonButton>
+            <IonButton
               onClick={() => {
                 setShowModal(true);
               }}
             >
-              <IonIcon icon="assets/icon/edit.svg"></IonIcon>
+              <IonIcon icon="assets/icon/calendar.svg"></IonIcon>
             </IonButton>
           </IonItem>
           <IonItem lines="none">
             <IonText>测试 你说呢我这个 是一个测试而已</IonText>
             <IonButton
-              onClick={() => {
-                console.log("clicked");
-              }}
             >
               <IonIcon icon="assets/icon/edit.svg"></IonIcon>
+            </IonButton>
+            <IonButton
+              onClick={() => {
+                setShowModal(true);
+              }}
+            >
+              <IonIcon icon="assets/icon/calendar.svg"></IonIcon>
             </IonButton>
           </IonItem>
           <IonItem lines="none">
             <IonText>测试 你说呢我这个 是一个测试而已</IonText>
             <IonButton
-              onClick={() => {
-                console.log("clicked");
-              }}
             >
               <IonIcon icon="assets/icon/edit.svg"></IonIcon>
+            </IonButton>
+            <IonButton
+              onClick={() => {
+                setShowModal(true);
+              }}
+            >
+              <IonIcon icon="assets/icon/calendar.svg"></IonIcon>
             </IonButton>
           </IonItem>
           <IonItem lines="none">
             <IonText>测试 你说呢我这个 是一个测试而已</IonText>
             <IonButton
-              onClick={() => {
-                console.log("clicked");
-              }}
             >
               <IonIcon icon="assets/icon/edit.svg"></IonIcon>
+            </IonButton>
+            <IonButton
+              onClick={() => {
+                setShowModal(true);
+              }}
+            >
+              <IonIcon icon="assets/icon/calendar.svg"></IonIcon>
             </IonButton>
           </IonItem>
         </IonList>
@@ -79,7 +95,6 @@ const BacklogList = () => {
         onDidDismiss={() => {setShowModal(false); setShowDatePicker(false)}}
       >
         <IonContent className="my-content">
-              <IonButton className="modal-button">编辑</IonButton>
               <IonDatetime ></IonDatetime>
         </IonContent>
       </IonModal>
