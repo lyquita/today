@@ -15,44 +15,19 @@ import { AppContext } from "../../data/AppContext";
 import { getTodolistByDate, ITodo } from "../../services/todolist";
 import moment from "moment";
 
-const Today: React.FC = () => {
-  const [login, setLogin] = useState<boolean>(false);
+interface IProps{
+  login: boolean,
+  today: string,
+  todoAmount: number,
+  inprogressAmount: number,
+  doneAmount: number,
+  setLogin: (value:boolean)=> void;
+}
+
+
+const Today: React.FC<IProps> = ({login, today, todoAmount, inprogressAmount, doneAmount, setLogin}) => {
   const { state, dispatch } = useContext(AppContext);
-  const [ today, setToday ] = useState(moment(new Date()).format("yyyy-MM-DD"))
-  const [ todoAmount, setTodoAmount ] = useState<number>(0)
-  const [ inprogressAmount, setInprogressAmount ] = useState<number>(0)
-  const [ doneAmount, setDoneAmount ] = useState<number>(0)
 
-  useEffect(() => {
-    
-    getTodolistByDate(today)
-    .then((res) => {
-      let pending = 0;
-      let working = 0;
-      let done =0;
-
-      res.data.map((item:ITodo) => {
-  
-        switch (item.status) {
-          case "pending":
-            pending = pending + 1
-            break;
-          case "working":
-            working = working+1
-            break;
-          case "done":
-            done = done+1
-            break
-          default:
-            break;
-        }
-      })
-      setTodoAmount(pending)
-      setInprogressAmount(working)
-      setDoneAmount(done)
-    })
-    .catch((err) => console.log(err));
-  }, [login]);
 
   const handleLogout = () => {
     dispatch({
@@ -63,12 +38,7 @@ const Today: React.FC = () => {
     setLogin(false);
   };
 
-  // check login status
-  getStorage("hasLoggedIn").then((res) => {
-    if (res.value) {
-      setLogin(true);
-    }
-  });
+  
 
   
 
@@ -103,8 +73,7 @@ const Today: React.FC = () => {
         </IonItem>
         <IonItem lines="none" routerLink="/backlog">
           <IonText>
-            <h2 className="font-bold">收集清单</h2>
-            <p>Redesign the todo list home page</p>
+            <h2>收集要做的事</h2>
           </IonText>
         </IonItem>
       </IonList>
