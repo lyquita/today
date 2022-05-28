@@ -23,12 +23,13 @@ const LoginComponent: React.FC = () => {
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [showLoginSuccess, setShowLoginSuccess] = useState<boolean>(false);
+  const [showPasswordError, setShowPasswordError] = useState<boolean>(false);
 
   const history = useHistory();
 
   useEffect(() => {
     console.log("effect", showLoginSuccess);
-  }, [showLoginSuccess]);
+  }, [showLoginSuccess, setShowPasswordError]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -58,6 +59,7 @@ const LoginComponent: React.FC = () => {
       }
     } catch (error) {
       console.error("login failed. " + error);
+      setShowPasswordError(true)
     }
   };
 
@@ -106,8 +108,6 @@ const LoginComponent: React.FC = () => {
           buttons={[
             {
               text: "确定",
-              role: "cancel",
-              id: "cancel-button",
               handler: (blah) => {
                 setShowLoginSuccess(false);
                 history.push("/home");
@@ -118,6 +118,20 @@ const LoginComponent: React.FC = () => {
       ) : (
         ""
       )}
+
+      {
+        showPasswordError? (
+          <Alert isOpen={showPasswordError} message="账号密码错误~" buttons={[
+            {
+              text: "确定",
+              handler: (blah) => {
+                setShowPasswordError(false);
+              }
+            }
+          ]} />
+        ):<></>
+      }
+
     </div>
   );
 };
