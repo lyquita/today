@@ -4,7 +4,7 @@ import { useContext, useEffect, useState } from 'react';
 import Greeting from '../../components/Home/Greeting';
 import Today from '../../components/Home/Today';
 import { AppContext } from '../../data/AppContext';
-import { getStorage } from '../../services/localStorage';
+import { getStorage, setStorage } from '../../services/localStorage';
 import { getUsername } from '../../services/login';
 import './home.scss';
 import { Storage } from '@capacitor/storage';
@@ -26,26 +26,33 @@ const Home: React.FC = () => {
 
   useEffect(() => {
     GenerateGreeting();
-
+      
 
       // get username by userid
-      getStorage("user_id").then((res) =>
+      getStorage("user_id")
+      .then((res) =>
       {
-        if(res.value !== null) {
-         getUsername(res.value)
+        if(res) {
+         getUsername(res)
          .then((m) => {
-           setUsername(m.data.username);
-           Storage.set({
-             key: "username",
-             value: m.data.username,
-           });
+          console.error('2');  
+          if(m.data.username){
+            console.error('3');
+            setUsername(m.data.username);
+            setStorage("username",m.data.username);
+          }else{
+            console.error('4');
+          }
+          
          })
-         .catch((err) => console.log(err))
+         .catch((err) => console.error('get username failed ' + err))
         }else{
-          setUsername('')
+          console.error('1')
+          setUsername('');
+
         }
       }
-    );
+    ).catch(err => console.error('get storage user id failed ' + err))
 
 
     getTodolistByDate(today)
@@ -87,7 +94,7 @@ const Home: React.FC = () => {
    
    // check login status
    getStorage("hasLoggedIn").then((res) => {
-    if (res.value) {
+    if (res) {
       setLogin(true);
     }
   });

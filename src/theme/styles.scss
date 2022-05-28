@@ -20,6 +20,27 @@
         width: 75px;
         margin: 0 auto;
     }
-  
-    
+  }
+
+
+  .alert-class {
+      --background:white;
+      .alert-wrapper{
+          --color: red;
+          border-radius: 20px;
+
+          .alert-message{
+            color: black;
+            display: flex;
+            justify-content: center;
+          }
+          .alert-button-group{
+            display: flex;
+            justify-content: center;
+            .alert-button-inner{
+                color: #fcd8d4;
+            }
+          }
+          
+      }
   }

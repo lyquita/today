@@ -14,6 +14,7 @@ import {
 import moment from "moment";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
+import { getStorage } from "../../services/localStorage";
 import {
   deleteTodo,
   getTodolistByDate,
@@ -56,9 +57,9 @@ const Todolist: React.FC = () => {
       })
       .catch((err) => console.log(err));
 
-    Storage.get({ key: "username" }).then((res) => {
-      if (res.value) {
-        setUsername(res.value);
+    getStorage("username").then((res) => {
+      if (res) {
+        setUsername(res);
       }
     });
   }, []);

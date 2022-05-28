@@ -1,0 +1,6 @@
+{
+	"appId": "today.hireoo.fun",
+	"appName": "today",
+	"webDir": "build",
+	"bundledWebRuntime": false
+}
