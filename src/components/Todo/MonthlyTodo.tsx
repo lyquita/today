@@ -8,6 +8,7 @@ const MonthlyTodoButton = () => {
         <div id="monthly-todo-button">
         <IonButton slot="end" routerLink="/monthly-todo">
             <IonIcon icon="assets/icon/monthly-open.svg"></IonIcon>
+            本月
         </IonButton>
         </div>
     )

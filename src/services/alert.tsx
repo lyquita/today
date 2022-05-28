@@ -24,3 +24,5 @@ export const Alert:React.FC<IProps> = ({message, isOpen, buttons}) => {
       />
     )
 }
+
+

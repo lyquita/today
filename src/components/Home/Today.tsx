@@ -14,6 +14,8 @@ import { clearStorage, getStorage } from "../../services/localStorage";
 import { AppContext } from "../../data/AppContext";
 import { getTodolistByDate, ITodo } from "../../services/todolist";
 import moment from "moment";
+import { Alert } from "../../services/alert";
+import { useHistory } from "react-router";
 
 interface IProps{
   login: boolean,
@@ -27,7 +29,8 @@ interface IProps{
 
 const Today: React.FC<IProps> = ({login, today, todoAmount, inprogressAmount, doneAmount, setLogin}) => {
   const { state, dispatch } = useContext(AppContext);
-
+  const  [showLogoutAlert, setShowLogoutAlert] = useState<boolean>(false);
+  const history = useHistory();
 
   const handleLogout = () => {
     dispatch({
@@ -40,6 +43,7 @@ const Today: React.FC<IProps> = ({login, today, todoAmount, inprogressAmount, do
 
   
 
+  useEffect(()=> {} ,[showLogoutAlert, login])
   
 
   return (
@@ -78,12 +82,34 @@ const Today: React.FC<IProps> = ({login, today, todoAmount, inprogressAmount, do
         </IonItem>
       </IonList>
       {login ? (
-        <IonButton routerLink="/login" onClick={handleLogout}>
+        <IonButton onClick={()=>setShowLogoutAlert(true)}>
           退出
         </IonButton>
       ) : (
         <IonButton routerLink="/login">登录</IonButton>
       )}
+  {
+    showLogoutAlert? (
+      <Alert  isOpen={showLogoutAlert} message="确定要退出吗？" buttons={[
+        {
+          text:'确定',
+          handler:() => {
+            setShowLogoutAlert(false);
+            handleLogout();
+            history.push('/login');
+          }
+        },
+        {
+          text:'取消',
+          cssClass: 'cancel',
+          handler:()=>{
+            setShowLogoutAlert(false)
+          }
+        }
+      ]}/>
+    ): ''
+  }
+      
     </div>
   );
 };

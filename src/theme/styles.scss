@@ -37,6 +37,13 @@
           .alert-button-group{
             display: flex;
             justify-content: center;
+
+            .cancel{
+              .alert-button-inner{
+                color: gray
+              }
+            }
+
             .alert-button-inner{
                 color: #fcd8d4;
             }
