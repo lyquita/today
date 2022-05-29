@@ -17,7 +17,8 @@
         --inner-padding-end:0px;
         display: flex;
         width: 100%;
-        height: 40px;
+        justify-content: center;
+
 
         ion-label{
           margin-left: 0.5rem;
@@ -28,6 +29,7 @@
           border-width: 1px !important;
           border-style: solid !important;
           border-radius: 4px;
+          margin-right: 0.5rem;
           border-color: blue !important;
           --size: 20px;
           --checkmark-color: blue;
@@ -47,10 +49,14 @@
           width: 140px;
         }
 
+        ion-textarea {
+          padding: 0;
+          margin: 0;
+          margin-left: 0.5rem;
+        }
+
         ion-input{
-          border: 0.5px solid blue;
-          --background: white;
-          padding: 0 0.5rem;
+          margin-left: 0.5rem;
         }
       }
     }
