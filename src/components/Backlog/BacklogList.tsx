@@ -31,6 +31,7 @@ import { Storage } from "@capacitor/storage";
 import moment from "moment";
 import { ITodo, postNewTodo } from "../../services/todolist";
 import { getStorage } from "../../services/localStorage";
+import { Alert } from "../../services/alert";
 
 const BacklogList = () => {
   const [showModal, setShowModal] = useState(false);
@@ -45,6 +46,8 @@ const BacklogList = () => {
   const [editInputValue, setEditInputValue] = useState<string>("");
   const [showPopover, setShowpopover] = useState<boolean>(false);
   const [selectedDate, setSelectedDate] = useState<string>("");
+  const [showNewTodoAlert, setShowNewTodoAlert] = useState<boolean>(false);
+  const [showEmptyDateAlert, setShowEmptyDateAlert] = useState<boolean>(false);
 
   function handleAddBacklog() {
     const params: IBacklog = {
@@ -71,47 +74,67 @@ const BacklogList = () => {
   }
 
   function handleEdit(value: number) {
-    let editedBacklog = backlogList.find((x) => x.id === value);
+    if (editInputValue) {
+      let editedBacklog = backlogList.find((x) => x.id === value);
 
-    if (editedBacklog) {
-      editedBacklog = { ...editedBacklog, text: editInputValue };
+      if (editedBacklog) {
+        editedBacklog = { ...editedBacklog, text: editInputValue };
 
-      updateBacklog(value, editedBacklog)
-        .then((res) => {
-          setRenderflag(!renderFlag);
-          setEditid(0);
-          setEditInputValue("");
-        })
-        .catch((err) => console.log(err));
+        updateBacklog(value, editedBacklog)
+          .then((res) => {
+            setRenderflag(!renderFlag);
+            setEditid(0);
+            setEditInputValue("");
+          })
+          .catch((err) => console.log(err));
+      }
     }
   }
 
   function handleSave() {
-    const newTodo = backlogList.find((x) => x.id === targetBacklog);
 
-    const params: ITodo = {
-      created_date: selectedDate,
-      username: username,
-      text: newTodo?.text || "",
-      status: "pending",
-      month: moment(selectedDate).format("MM"),
-      year: moment(selectedDate).format("yyyy"),
-    };
+    if(!selectedDate){
+      setShowEmptyDateAlert(true)
+    }else{
+      const newTodo = backlogList.find((x) => x.id === targetBacklog);
 
-    postNewTodo(params).then(
-      res => deleteBacklog(targetBacklog)
-      .then(res =>{ console.log(res);
-      
-    setRenderflag(!renderFlag);
-      
-      }
+      const params: ITodo = {
+        created_date: selectedDate,
+        username: username,
+        text: newTodo?.text || "",
+        status: "pending",
+        month: moment(selectedDate).format("MM"),
+        year: moment(selectedDate).format("yyyy"),
+      };
+  
+      postNewTodo(params)
+        .then((res) =>
+          deleteBacklog(targetBacklog)
+            .then((res) => {
+              setRenderflag(!renderFlag);
+              setSelectedDate('');
+              setShowNewTodoAlert(true);
+            })
+            .catch((err) => console.log(err))
+        )
+        .catch((err) => console.log(err));
+  
+      setShowpopover(false);
+    }
+
+   
+  }
+
+  function handleRemove(value: number) {
+    deleteBacklog(value)
+      .then((res) =>
+        getBackloglist()
+          .then((res) => {
+            setRenderflag(!renderFlag);
+          })
+          .catch((err) => console.log(err))
       )
-      .catch(err => console.log(err)
-      )
-    ).catch(err => console.log(err)
-    )
-    
-    setShowpopover(false);
+      .catch((err) => console.log(err));
   }
 
   useEffect(() => {
@@ -124,17 +147,25 @@ const BacklogList = () => {
         setUsername(res);
       }
     });
-  }, [renderFlag]);
+  }, [renderFlag, showNewTodoAlert, showEmptyDateAlert]);
 
   return (
     <div id="backlog-list">
       <IonCard>
         <IonList>
           {backlogList.map((backlog) => (
-            <IonItem lines="none" key={backlog.id}>
+            <IonItem
+              lines="none"
+              key={backlog.id}
+              onClick={() => handleEditStatus(backlog.id!)}
+            >
               {editId !== backlog.id ? (
                 <>
-                  <IonText>{backlog.text}</IonText>
+                  <IonInput
+                    value={backlog.text}
+                    placeholder={backlog.text}
+                    onIonBlur={() => handleEdit(backlog.id!)}
+                  />
                   <IonButton
                     onClick={() => {
                       setShowActionSheet(true);
@@ -151,9 +182,15 @@ const BacklogList = () => {
                     onIonChange={(e) => setEditInputValue(e.detail.value!)}
                     value={editInputValue}
                     required
+                    onIonBlur={() => handleEdit(backlog.id!)}
                   ></IonInput>
-                  <IonButton onClick={() => handleEdit(backlog.id!)}>
-                    <IonIcon icon="assets/icon/save.svg"></IonIcon>
+                  <IonButton
+                    onClick={() => {
+                      setShowActionSheet(true);
+                      handleActionsheet(backlog.id);
+                    }}
+                  >
+                    <IonIcon icon="assets/icon/edit.svg"></IonIcon>
                   </IonButton>
                 </>
               )}
@@ -185,17 +222,53 @@ const BacklogList = () => {
         cssClass="action-sheet-class"
         buttons={[
           {
-            text: "编辑",
-            handler: () => {
-              handleEditStatus(targetBacklog);
-            },
-          },
-          {
             text: "设置日期",
             handler: () => setShowpopover(true),
           },
+          {
+            text: "删除",
+            role: "destructive",
+            id: "delete-button",
+            data: {
+              type: "delete",
+            },
+            handler: () => {
+              handleRemove(targetBacklog);
+            },
+          },
         ]}
       ></IonActionSheet>
+
+      {showNewTodoAlert ? (
+        <Alert
+          isOpen={showNewTodoAlert}
+          message={`已经添加到了${selectedDate} 计划中~`}
+          buttons={[{
+            text:'我知道了',
+            handler:()=>{
+              setShowNewTodoAlert(false)
+            }
+          }]}
+        />
+      ) : (
+        ""
+      )}
+
+
+      {
+        showEmptyDateAlert? (
+          <Alert 
+          isOpen= {showEmptyDateAlert}
+          message="请选择日期"
+          buttons={[{
+            text:'我知道了',
+            handler:()=> { 
+              setShowEmptyDateAlert(false)
+            }
+          }]}
+          />
+        ): ''
+      }
     </div>
   );
 };

@@ -18,7 +18,7 @@ const BacklogPage = () => {
           <IonButton>
             <IonBackButton icon="assets/icon/back.svg" text=""></IonBackButton>
           </IonButton>
-          <IonTitle slot="end">收集清单</IonTitle>
+          <IonTitle slot="end">收集要做的事</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent>

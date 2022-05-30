@@ -4,6 +4,54 @@
     border-radius: 20px;
     background: #fdf6f0;
     padding: 2rem 1rem;
+    margin-bottom: 8rem;
+    ion-item {
+      --background: #fdf6f0;
+      --inner-padding-end:0px;
+      display: flex;
+      width: 100%;
+      justify-content: center;
+
+
+      ion-label{
+        margin-left: 0.5rem;
+        white-space: normal;
+      }
+      ion-checkbox {
+        background: #ffffff;
+        border-width: 1px !important;
+        border-style: solid !important;
+        border-radius: 4px;
+        margin-right: 0.5rem;
+        border-color: blue !important;
+        --size: 20px;
+        --checkmark-color: blue;
+        --background-checked: #ffffff;
+        --border-color: #ffffff;
+        --border-color-checked: #ffffff;
+      }
+      ion-button {
+        --background: #fdf6f0;
+        --box-shadow: none;
+        --border-radius: 20px;
+        --color: black;
+        font-size: 18px;
+        font-weight: 400;
+      }
+      ion-text {
+        width: 140px;
+      }
+
+      ion-textarea {
+        padding: 0;
+        margin: 0;
+        margin-left: 0.5rem;
+      }
+
+      ion-input{
+        margin-left: 0.5rem;
+      }
+    }
     ion-list {
       ion-list-header{
         margin-left: 0;
@@ -12,54 +60,15 @@
 
       background: #fdf6f0;
 
-      ion-item {
-        --background: #fdf6f0;
-        --inner-padding-end:0px;
-        display: flex;
-        width: 100%;
-        justify-content: center;
-
-
-        ion-label{
-          margin-left: 0.5rem;
-          white-space: normal;
-        }
-        ion-checkbox {
-          background: #ffffff;
-          border-width: 1px !important;
-          border-style: solid !important;
-          border-radius: 4px;
-          margin-right: 0.5rem;
-          border-color: blue !important;
-          --size: 20px;
-          --checkmark-color: blue;
-          --background-checked: #ffffff;
-          --border-color: #ffffff;
-          --border-color-checked: #ffffff;
-        }
-        ion-button {
-          --background: #fdf6f0;
-          --box-shadow: none;
-          --border-radius: 20px;
-          --color: black;
-          font-size: 14px;
-          font-weight: 400;
-        }
-        ion-text {
-          width: 140px;
-        }
-
-        ion-textarea {
-          padding: 0;
-          margin: 0;
-          margin-left: 0.5rem;
-        }
-
-        ion-input{
-          margin-left: 0.5rem;
-        }
-      }
+     
     }
+  };
+
+
+  ion-footer {
+    position: fixed;
+    bottom: 0.5rem;
+
   }
 
 

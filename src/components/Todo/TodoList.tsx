@@ -4,6 +4,7 @@ import {
   IonButton,
   IonCard,
   IonCheckbox,
+  IonFooter,
   IonIcon,
   IonInput,
   IonItem,
@@ -13,6 +14,8 @@ import {
   IonReorder,
   IonReorderGroup,
   IonTextarea,
+  IonToolbar,
+  ItemReorderEventDetail,
 } from "@ionic/react";
 import moment from "moment";
 import { Ref, useEffect, useRef, useState } from "react";
@@ -49,6 +52,8 @@ const Todolist: React.FC = () => {
   const [targetTodo, setTargetTodo] = useState<number>(0);
   const [editId, setEditId] = useState<number>(0);
   const [editInputValue, setEditInputValue] = useState<string>("");
+  const [groupedItem, setGroupedItem] = useState<ITodo[]>([]);
+  const [showKeyboard, setShowKeyboard] = useState<boolean>(false)
 
   const params: RouteParams = useParams();
 
@@ -64,7 +69,7 @@ const Todolist: React.FC = () => {
         setUsername(res);
       }
     });
-  }, []);
+  }, [showKeyboard, editInputValue]);
 
   function handleAddTodo(value: string) {
     const params: ITodo = {
@@ -82,6 +87,7 @@ const Todolist: React.FC = () => {
           .then((res) => {
             setRes(res);
             setInputvalue("");
+            setShowKeyboard(false);
           })
           .catch((err) => console.log(err))
       )
@@ -171,10 +177,15 @@ const Todolist: React.FC = () => {
           )
           .catch((err) => console.log(err));
       }
+    }else{
+      setEditId(0)
+      setEditInputValue('')
     }
   }
 
   function handleEditStatus(value: number) {
+    console.log('clicked', value);
+    
     setEditId(value);
   }
 
@@ -185,188 +196,233 @@ const Todolist: React.FC = () => {
 
   function setRes(res: any) {
     setTodos(res.data);
-    setPending(res.data.filter((todo: ITodo) => todo.status === "pending"));
-    setWorking(res.data.filter((todo: ITodo) => todo.status === "working"));
-    setDone(res.data.filter((todo: ITodo) => todo.status === "done"));
+    let pending = res.data.filter((todo: ITodo) => todo.status === "pending");
+    let working = res.data.filter((todo: ITodo) => todo.status === "working");
+    let done = res.data.filter((todo: ITodo) => todo.status === "done");
+    setPending(pending);
+    setWorking(working);
+    setDone(done);
   }
+
+
+  
 
   return (
     <div id="todolist-component">
       <IonCard>
-        <IonList>
-          <IonListHeader className="text-lg ">计划</IonListHeader>
-          <IonReorderGroup>
-            {pending.map((item) => (
-              <IonItem
-                lines="none"
-                key={item.id}
-                onClick={() => handleEditStatus(item.id!)}
-              >
-                {editId === item.id ? (
+        <IonListHeader className="text-lg ">计划</IonListHeader>
+      
+        {pending.map((item) => (
+          <IonItem
+            lines="none"
+            key={item.id}
+          >
+            {editId === item.id ? (
+              <>
+                <IonCheckbox
+                  className="h-5 w-5"
+                  checked={checked}
+                  onIonChange={() => handleChecked(item.id!)}
+                ></IonCheckbox>
                   <>
-                    <IonCheckbox
-                      className="h-5 w-5"
-                      checked={checked}
-                      onIonChange={() => handleChecked(item.id!)}
-                    ></IonCheckbox>
-                    {item.text.length > 16 ? (
-                      <>
-                      <IonTextarea
-                        rows={2}
-                        value={editInputValue}
-                        required
-                        placeholder={item.text}
-                        onIonChange={(e) => setEditInputValue(e.detail.value!)}
-                        onIonBlur={() => handleEdit(item.id!)}
-                      ></IonTextarea>
-                      <IonReorder  />
-                      </>
-                    ) : (
-                      <>
-                      <IonInput
-                        value={editInputValue ? editInputValue : item.text}
-                        required
-                        placeholder={item.text}
-                        onIonChange={(e) => setEditInputValue(e.detail.value!)}
-                        onIonBlur={() => handleEdit(item.id!)}
-                      />
-                      <IonReorder  />
-                      </>
-                    )}
-                  </>
-                ) : (
-                  <>
-                    <IonCheckbox
-                      className="h-5 w-5"
-                      checked={checked}
-                      onIonChange={() => handleChecked(item.id!)}
-                    ></IonCheckbox>
-                    {item.text.length > 16 ? (
-                      <>
-                      <IonTextarea
-                        rows={2}
-                        value={item.text}
-                        required
-                        placeholder={item.text}
-                      ></IonTextarea>
-                      <IonReorder />
+                    <IonTextarea
+                      value={editInputValue}
+                      required
+                      placeholder={item.text}
+                      onIonInput={(e:any) => setEditInputValue(e.target.value)}
+                      // onIonChange={(e) => setEditInputValue(e.detail.value!)}
+                      onIonBlur={() => { handleEdit(item.id!); setEditInputValue('')}}
+                      onClick={() => handleEditStatus(item.id!)}
+                      autoGrow
+                    ></IonTextarea>
+                    <IonButton
+                      onClick={() => {
+                        setShowActionSheet(true);
+                        handleActionsheet(item.id)
 
-                      </>
-                    ) : (
-                      <>
-                      <IonInput
-                        value={item.text}
-                        required
-                        placeholder={item.text}
-                      />
-                      <IonReorder  />
-                      </>
-                    )}
+                      }}
+                    >
+                      <IonIcon icon="assets/icon/edit.svg"></IonIcon>
+                    </IonButton>
                   </>
-                )}
-              </IonItem>
-            ))}
-          </IonReorderGroup>
-        </IonList>
-        <IonList>
-          <IonListHeader className="text-lg">正在处理</IonListHeader>
-          {working.map((item) => (
-            <IonItem
-              lines="none"
-              key={item.id}
-              onClick={() => handleEditStatus(item.id!)}
-            >
-              {editId === item.id ? (
-                <>
-                  <IonCheckbox
-                    className="h-5 w-5"
-                    checked={checked}
-                    onIonChange={() => handleChecked(item.id!)}
-                  ></IonCheckbox>
-                  <IonInput
-                    value={editInputValue}
-                    required
-                    placeholder={item.text}
-                    onIonChange={(e) => setEditInputValue(e.detail.value!)}
-                    onIonBlur={() => handleEdit(item.id!)}
-                  ></IonInput>
-                </>
-              ) : (
-                <>
-                  <IonCheckbox
-                    className="h-5 w-5"
-                    checked={checked}
-                    onIonChange={() => handleChecked(item.id!)}
-                  ></IonCheckbox>
-                  <IonInput
-                    value={item.text}
-                    required
-                    placeholder={item.text}
-                  ></IonInput>
-                </>
-              )}
-            </IonItem>
-          ))}
-        </IonList>
-        <IonList className="mb-5">
-          <IonListHeader className="text-lg">完成</IonListHeader>
-          {done.map((item) => (
-            <IonItem
-              lines="none"
-              key={item.id}
-              onClick={() => handleEditStatus(item.id!)}
-            >
-              {editId === item.id ? (
-                <>
-                  <IonInput
-                    value={editInputValue}
-                    required
-                    placeholder={item.text}
-                    onIonChange={(e) => setEditInputValue(e.detail.value!)}
-                    onIonBlur={() => handleEdit(item.id!)}
-                  ></IonInput>
-                </>
-              ) : (
-                <>
-                  <IonInput
-                    value={item.text}
-                    required
-                    placeholder={item.text}
-                  ></IonInput>
-                </>
-              )}
-            </IonItem>
-          ))}
-        </IonList>
+              </>
+            ) : (
+              <>
+                <IonCheckbox
+                  className="h-5 w-5"
+                  checked={checked}
+                  onIonChange={() => handleChecked(item.id!)}
+                ></IonCheckbox>
+                  <>
+                    <IonTextarea
+                      autoGrow
+                      value={item.text}
+                      required
+                      placeholder={item.text}
+                      onClick={() => handleEditStatus(item.id!)}
+                    ></IonTextarea>
+                    <IonButton
+                      onClick={() => {
+                        setShowActionSheet(true);
+                        handleActionsheet(item.id)
+
+                      }}
+                    >
+                      <IonIcon icon="assets/icon/edit.svg"></IonIcon>
+                    </IonButton>
+                  </>
+              </>
+            )}
+          </IonItem>
+        ))}
+        <IonListHeader className="text-lg">正在处理</IonListHeader>
+        {working.map((item) => (
+           <IonItem
+           lines="none"
+           key={item.id}
+         >
+           {editId === item.id ? (
+             <>
+               <IonCheckbox
+                 className="h-5 w-5"
+                 checked={checked}
+                 onIonChange={() => handleChecked(item.id!)}
+               ></IonCheckbox>
+                 <>
+                   <IonTextarea
+                     value={editInputValue}
+                     required
+                     placeholder={item.text}
+                     onIonInput={(e:any) => setEditInputValue(e.target.value)}
+                     // onIonChange={(e) => setEditInputValue(e.detail.value!)}
+                     onIonBlur={() => { handleEdit(item.id!); setEditInputValue('')}}
+                     onClick={() => handleEditStatus(item.id!)}
+                     autoGrow
+                   ></IonTextarea>
+                   <IonButton
+                     onClick={() => {
+                       setShowActionSheet(true);
+                       handleActionsheet(item.id)
+
+                     }}
+                   >
+                     <IonIcon icon="assets/icon/edit.svg"></IonIcon>
+                   </IonButton>
+                 </>
+             </>
+           ) : (
+             <>
+               <IonCheckbox
+                 className="h-5 w-5"
+                 checked={checked}
+                 onIonChange={() => handleChecked(item.id!)}
+               ></IonCheckbox>
+                 <>
+                   <IonTextarea
+                     autoGrow
+                     value={item.text}
+                     required
+                     placeholder={item.text}
+                     onClick={() => handleEditStatus(item.id!)}
+                   ></IonTextarea>
+                   <IonButton
+                     onClick={() => {
+                       setShowActionSheet(true);
+                       handleActionsheet(item.id)
+
+                     }}
+                   >
+                     <IonIcon icon="assets/icon/edit.svg"></IonIcon>
+                   </IonButton>
+                 </>
+             </>
+           )}
+         </IonItem>
+        ))}
+        <IonListHeader className="text-lg">完成</IonListHeader>
+        {done.map((item) => (
+           <IonItem
+           lines="none"
+           key={item.id}
+         >
+           {editId === item.id ? (
+             <>
+                 <>
+                   <IonTextarea
+                     value={editInputValue}
+                     required
+                     placeholder={item.text}
+                     onIonInput={(e:any) => setEditInputValue(e.target.value)}
+                     // onIonChange={(e) => setEditInputValue(e.detail.value!)}
+                     onIonBlur={() => { handleEdit(item.id!); setEditInputValue('')}}
+                     onClick={() => handleEditStatus(item.id!)}
+                     autoGrow
+                   ></IonTextarea>
+                   <IonButton
+                     onClick={() => {
+                       setShowActionSheet(true);
+                       handleActionsheet(item.id)
+
+                     }}
+                   >
+                     <IonIcon icon="assets/icon/edit.svg"></IonIcon>
+                   </IonButton>
+                 </>
+             </>
+           ) : (
+             <>
+                 <>
+                   <IonTextarea
+                     autoGrow
+                     value={item.text}
+                     required
+                     placeholder={item.text}
+                     onClick={() => handleEditStatus(item.id!)}
+                     className="line-through"
+                   ></IonTextarea>
+                   <IonButton
+                     onClick={() => {
+                       setShowActionSheet(true);
+                       handleActionsheet(item.id)
+
+                     }}
+                   >
+                     <IonIcon icon="assets/icon/edit.svg"></IonIcon>
+                   </IonButton>
+                 </>
+             </>
+           )}
+         </IonItem>
+        ))}
+      </IonCard>
+      <IonFooter>
+        <IonToolbar >
         <Addtodo
           handleAddTodo={handleAddTodo}
           inputValue={inputValue}
           setInputvalue={setInputvalue}
+          setShowKeyBoard ={setShowKeyboard}
         />
-      </IonCard>
+        </IonToolbar>
+      </IonFooter>
+     
       <IonActionSheet
         isOpen={showActionSheet}
         onDidDismiss={() => setShowActionSheet(false)}
         cssClass="action-sheet-class"
         buttons={[
           {
-            text: "计划状态",
+            text: "添加到计划",
             data: "Data value",
             handler: () => {
               handlePending(targetTodo);
             },
           },
           {
-            text: "处理中",
+            text: "添加到处理中",
             data: 10,
             handler: () => {
               handleWorking(targetTodo);
-            },
-          },
-          {
-            text: "编辑",
-            handler: () => {
-              handleEditStatus(targetTodo);
             },
           },
           {

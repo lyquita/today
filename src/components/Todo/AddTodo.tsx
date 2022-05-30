@@ -6,16 +6,17 @@ interface Props {
   handleAddTodo : (value:string) => void;
   inputValue: string;
   setInputvalue: (value:string) => void; 
+  setShowKeyBoard: (value:boolean) => void;
 }
 
 
-const Addtodo: React.FC<Props> = ({handleAddTodo, inputValue, setInputvalue}) => {
+const Addtodo: React.FC<Props> = ({handleAddTodo, inputValue, setInputvalue, setShowKeyBoard}) => {
 
   
 
   return (
     <div id="add-todo" className="flex">
-      <IonInput name="addtodo" type="text" required placeholder="Add a new todo" onIonChange={e=> setInputvalue(e.detail.value!)} value={inputValue}></IonInput>
+      <IonInput name="addtodo" type="text" required placeholder="Add a new todo" onIonChange={e=> setInputvalue(e.detail.value!)} value={inputValue} onClick={()=>setShowKeyBoard(true)!} onIonBlur={()=>setShowKeyBoard(false)}></IonInput>
       <IonButton onClick={()=> handleAddTodo(inputValue)}>
           <IonIcon icon="assets/icon/submit.svg" />
       </IonButton>
