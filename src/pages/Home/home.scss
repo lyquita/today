@@ -1,10 +1,17 @@
 #home-page{
-    ion-content {
-        --offset-bottom: auto!important;
-        --overflow: hidden;
-        overflow: auto;
-        &::-webkit-scrollbar {
-          display: none;
+  ion-footer{
+    ion-toolbar{
+      ion-button{
+        --background: #fcd8d4;
+        --box-shadow: none;
+        --border-radius: 20px;
+        --color: black;
+        font-size: 18px;
+        font-weight: 400;
+        ion-icon{
+          --size:30px
         }
       }
+    }
+  }
 }

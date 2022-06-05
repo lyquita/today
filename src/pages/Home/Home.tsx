@@ -1,99 +1,103 @@
-import { IonContent, IonHeader, IonPage, IonRefresher, IonRefresherContent, IonTitle, IonToolbar, RefresherEventDetail } from '@ionic/react';
-import moment from 'moment';
-import { useContext, useEffect, useState } from 'react';
-import Greeting from '../../components/Home/Greeting';
-import Today from '../../components/Home/Today';
-import { AppContext } from '../../data/AppContext';
-import { getStorage, setStorage } from '../../services/localStorage';
-import { getUsername } from '../../services/login';
-import './home.scss';
-import { Storage } from '@capacitor/storage';
-import { getTodolistByDate, ITodo } from '../../services/todolist';
+import {
+  IonButton,
+  IonContent,
+  IonFooter,
+  IonHeader,
+  IonIcon,
+  IonMenu,
+  IonMenuButton,
+  IonPage,
+  IonRefresher,
+  IonRefresherContent,
+  IonText,
+  IonTitle,
+  IonToolbar,
+  RefresherEventDetail,
+} from "@ionic/react";
+import moment from "moment";
+import { useContext, useEffect, useState } from "react";
+import Greeting from "../../components/Home/Greeting";
+import Today from "../../components/Home/Today";
+import { AppContext } from "../../data/AppContext";
+import { getStorage, setStorage } from "../../services/localStorage";
+import { getUsername } from "../../services/login";
+import "./home.scss";
+import { Storage } from "@capacitor/storage";
+import { getTodolistByDate, ITodo } from "../../services/todolist";
+import Menu from "../../components/Menu/Menu";
 
 const Home: React.FC = () => {
-
   const [currentTime, setCurrentTime] = useState<boolean>(false);
   const [username, setUsername] = useState<string>("");
   const [currentGreeting, setCurrentGreeting] = useState<string>("你好呀");
   const { state, dispatch } = useContext(AppContext);
   const [login, setLogin] = useState(state.user.isLoggedin);
   const [renderFlag, setRenderFlag] = useState<boolean>(false);
-  const [ today, setToday ] = useState(moment(new Date()).format("yyyy-MM-DD"))
-  const [ todoAmount, setTodoAmount ] = useState<number>(0)
-  const [ inprogressAmount, setInprogressAmount ] = useState<number>(0)
-  const [ doneAmount, setDoneAmount ] = useState<number>(0)
- 
+  const [today, setToday] = useState(moment(new Date()).format("yyyy-MM-DD"));
+  const [todoAmount, setTodoAmount] = useState<number>(0);
+  const [inprogressAmount, setInprogressAmount] = useState<number>(0);
+  const [doneAmount, setDoneAmount] = useState<number>(0);
 
   useEffect(() => {
     GenerateGreeting();
-      
 
-      // get username by userid
-      getStorage("user_id")
-      .then((res) =>
-      {
-        if(res) {
-         getUsername(res)
-         .then((m) => {
-          console.error('2');  
-          if(m.data.username){
-            console.error('3');
-            setUsername(m.data.username);
-            setStorage("username",m.data.username);
-          }else{
-            console.error('4');
-          }
-          
-         })
-         .catch((err) => console.error('get username failed ' + err))
-        }else{
-          console.error('1')
-          setUsername('');
-
-        }
-      }
-    ).catch(err => console.error('get storage user id failed ' + err))
-
-
-    getTodolistByDate(today)
-    .then((res) => {
-      let pending = 0;
-      let working = 0;
-      let done =0;
-
-      res.data.map((item:ITodo) => {
-  
-        switch (item.status) {
-          case "pending":
-            pending = pending + 1
-            break;
-          case "working":
-            working = working+1
-            break;
-          case "done":
-            done = done+1
-            break
-          default:
-            break;
+    // get username by userid
+    getStorage("user_id")
+      .then((res) => {
+        if (res) {
+          getUsername(res)
+            .then((m) => {
+              console.error("2");
+              if (m.data.username) {
+                console.error("3");
+                setUsername(m.data.username);
+                setStorage("username", m.data.username);
+              } else {
+                console.error("4");
+              }
+            })
+            .catch((err) => console.error("get username failed " + err));
+        } else {
+          console.error("1");
+          setUsername("");
         }
       })
-      setTodoAmount(pending)
-      setInprogressAmount(working)
-      setDoneAmount(done)
-    })
-    .catch((err) => {
-      setTodoAmount(0)
-      setInprogressAmount(0)
-      setDoneAmount(0)
-    });
+      .catch((err) => console.error("get storage user id failed " + err));
 
- 
+    getTodolistByDate(today)
+      .then((res) => {
+        let pending = 0;
+        let working = 0;
+        let done = 0;
 
+        res.data.map((item: ITodo) => {
+          switch (item.status) {
+            case "pending":
+              pending = pending + 1;
+              break;
+            case "working":
+              working = working + 1;
+              break;
+            case "done":
+              done = done + 1;
+              break;
+            default:
+              break;
+          }
+        });
+        setTodoAmount(pending);
+        setInprogressAmount(working);
+        setDoneAmount(done);
+      })
+      .catch((err) => {
+        setTodoAmount(0);
+        setInprogressAmount(0);
+        setDoneAmount(0);
+      });
   }, [renderFlag, login, doneAmount, todoAmount, inprogressAmount]);
 
-   
-   // check login status
-   getStorage("hasLoggedIn").then((res) => {
+  // check login status
+  getStorage("hasLoggedIn").then((res) => {
     if (res) {
       setLogin(true);
     }
@@ -114,33 +118,57 @@ const Home: React.FC = () => {
     } else {
       return setCurrentGreeting("你好呀~");
     }
-  };
-
+  }
 
   function doRefresh(event: CustomEvent<RefresherEventDetail>) {
-    console.log('Begin async operation');
-    setRenderFlag(!renderFlag)
-  
+    console.log("Begin async operation");
+    setRenderFlag(!renderFlag);
+
     setTimeout(() => {
-      console.log('Async operation has ended');
+      console.log("Async operation has ended");
       event.detail.complete();
     }, 2000);
   }
 
-  
-  
+  function openMenu() {}
+
   return (
-    <IonPage id='home-page'>
-      <IonContent>
-        <IonRefresher slot='fixed' onIonRefresh={doRefresh}>
-          <IonRefresherContent    
-          pullingText="Pull to refresh"
-          refreshingSpinner="circles"
-          refreshingText="Refreshing..."></IonRefresherContent>
+    <IonPage id="home-page">
+      <Menu  
+          setLogin={setLogin}
+          login={login}
+      
+      />
+      <IonContent id="menu">
+        <IonRefresher slot="fixed" onIonRefresh={doRefresh}>
+          <IonRefresherContent
+            pullingText="Pull to refresh"
+            refreshingSpinner="circles"
+            refreshingText="Refreshing..."
+          ></IonRefresherContent>
         </IonRefresher>
-           <Greeting  username={username} currentGreeting={currentGreeting} currentTime={currentTime}/>
-            <Today login={login} today={today} todoAmount={todoAmount} inprogressAmount={inprogressAmount} doneAmount={doneAmount} setLogin={setLogin}/> 
+        <Greeting
+          username={username}
+          currentGreeting={currentGreeting}
+          currentTime={currentTime}
+        />
+        <Today
+          login={login}
+          today={today}
+          todoAmount={todoAmount}
+          inprogressAmount={inprogressAmount}
+          doneAmount={doneAmount}
+          setLogin={setLogin}
+        />
       </IonContent>
+      <IonFooter className="ion-no-border">
+        <IonToolbar>
+          <IonMenuButton slot="start" />
+          <IonButton slot="end">
+            <IonIcon ios="assets/icon/add.svg"></IonIcon>
+          </IonButton>
+        </IonToolbar>
+      </IonFooter>
     </IonPage>
   );
 };

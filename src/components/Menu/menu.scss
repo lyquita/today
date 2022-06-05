@@ -1,0 +1,19 @@
+#menu-nav {
+
+
+  ion-menu{
+      --width: 30vw;
+  }
+
+  ion-content::part(scroll) {
+    display: flex;
+    align-items: center;
+  }
+
+  ion-button {
+    --background: white;
+    --color: black;
+    --box-shadow: none;
+    font-size: 14px;
+  }
+}

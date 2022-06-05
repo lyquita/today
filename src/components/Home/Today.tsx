@@ -1,6 +1,7 @@
 import {
   IonButton,
   IonCol,
+  IonIcon,
   IonItem,
   IonList,
   IonRow,
@@ -17,19 +18,25 @@ import moment from "moment";
 import { Alert } from "../../services/alert";
 import { useHistory } from "react-router";
 
-interface IProps{
-  login: boolean,
-  today: string,
-  todoAmount: number,
-  inprogressAmount: number,
-  doneAmount: number,
-  setLogin: (value:boolean)=> void;
+interface IProps {
+  login: boolean;
+  today: string;
+  todoAmount: number;
+  inprogressAmount: number;
+  doneAmount: number;
+  setLogin: (value: boolean) => void;
 }
 
-
-const Today: React.FC<IProps> = ({login, today, todoAmount, inprogressAmount, doneAmount, setLogin}) => {
+const Today: React.FC<IProps> = ({
+  login,
+  today,
+  todoAmount,
+  inprogressAmount,
+  doneAmount,
+  setLogin,
+}) => {
   const { state, dispatch } = useContext(AppContext);
-  const  [showLogoutAlert, setShowLogoutAlert] = useState<boolean>(false);
+  const [showLogoutAlert, setShowLogoutAlert] = useState<boolean>(false);
   const history = useHistory();
 
   const handleLogout = () => {
@@ -41,10 +48,7 @@ const Today: React.FC<IProps> = ({login, today, todoAmount, inprogressAmount, do
     setLogin(false);
   };
 
-  
-
-  useEffect(()=> {} ,[showLogoutAlert, login])
-  
+  useEffect(() => {}, [showLogoutAlert, login]);
 
   return (
     <div className="px-8" id="today-component">
@@ -54,62 +58,36 @@ const Today: React.FC<IProps> = ({login, today, todoAmount, inprogressAmount, do
       </div>
       <IonList>
         <IonItem lines="none" routerLink={`/todo/${today}`}>
+          <IonText>
+            <h2>今天要做的事</h2>
+          </IonText>
+        </IonItem>
+        <IonItem lines="none">
           <IonRow>
             <IonCol>
               <IonText>
-                <p className="font-bold">{todoAmount}</p>
-                <p>计划</p>
+                <h2>关于今天的心情</h2>
               </IonText>
             </IonCol>
             <IonCol>
-              <IonText>
-                <p className="font-bold">{inprogressAmount}</p>
-                <p>正在处理</p>
-              </IonText>
-            </IonCol>
-            <IonCol>
-              <IonText>
-                <p className="font-bold">{doneAmount}</p>
-                <p>完成</p>
-              </IonText>
+              <IonIcon icon="assets/icon/cool.svg"></IonIcon>
             </IonCol>
           </IonRow>
         </IonItem>
-        <IonItem lines="none" routerLink="/backlog">
+        {/* <IonItem lines="none" routerLink="/backlog">
           <IonText>
             <h2>收集要做的事</h2>
           </IonText>
-        </IonItem>
+        </IonItem> */}
       </IonList>
-      {login ? (
+      {/* {login ? (
         <IonButton onClick={()=>setShowLogoutAlert(true)}>
           退出
         </IonButton>
       ) : (
         <IonButton routerLink="/login">登录</IonButton>
-      )}
-  {
-    showLogoutAlert? (
-      <Alert  isOpen={showLogoutAlert} message="确定要退出吗？" buttons={[
-        {
-          text:'确定',
-          handler:() => {
-            setShowLogoutAlert(false);
-            handleLogout();
-            history.push('/login');
-          }
-        },
-        {
-          text:'取消',
-          cssClass: 'cancel',
-          handler:()=>{
-            setShowLogoutAlert(false)
-          }
-        }
-      ]}/>
-    ): ''
-  }
-      
+      )} */}
+    
     </div>
   );
 };

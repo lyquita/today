@@ -5,10 +5,11 @@ interface Props {
   inputValue: string,
   setInputvalue: (value:string) => void;
   handleAddBacklog: () => void;
+  inputRef: any
 }
 
 
-const Addbacklog:React.FC<Props> = ({ inputValue, setInputvalue, handleAddBacklog }) => {
+const Addbacklog:React.FC<Props> = ({ inputValue, setInputvalue, handleAddBacklog, inputRef }) => {
   return (
     <div id="addbacklog" className="flex">
       <IonInput
@@ -18,6 +19,7 @@ const Addbacklog:React.FC<Props> = ({ inputValue, setInputvalue, handleAddBacklo
         placeholder="添加新的清单"
         value={inputValue}
         onIonChange={e=> setInputvalue(e.detail.value!)} 
+        ref={inputRef}
       ></IonInput>
       <IonButton onClick={handleAddBacklog}>
         <IonIcon icon="assets/icon/submit.svg" />

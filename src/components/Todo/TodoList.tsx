@@ -8,18 +8,31 @@ import {
   IonIcon,
   IonInput,
   IonItem,
+  IonItemOption,
+  IonItemOptions,
+  IonItemSliding,
   IonLabel,
   IonList,
   IonListHeader,
   IonReorder,
   IonReorderGroup,
+  IonText,
   IonTextarea,
   IonToolbar,
   ItemReorderEventDetail,
 } from "@ionic/react";
+import {
+  heart,
+  trash,
+  star,
+  archive,
+  ellipsisHorizontal,
+  ellipsisVertical,
+} from "ionicons/icons";
 import moment from "moment";
 import { Ref, useEffect, useRef, useState } from "react";
 import { useParams } from "react-router";
+import { postNewBacklog } from "../../services/backlog";
 import { getStorage } from "../../services/localStorage";
 import {
   deleteTodo,
@@ -43,17 +56,14 @@ const Todolist: React.FC = () => {
   const [working, setWorking] = useState<ITodo[]>([]);
   const [done, setDone] = useState<ITodo[]>([]);
   const [username, setUsername] = useState<string>("");
-  const [checked, setChecked] = useState<boolean>(false);
   const [inputValue, setInputvalue] = useState<string>("");
   const [today, setToday] = useState<string>(
     moment(new Date()).format("yyyy-MM-DD")
   );
-  const [showActionSheet, setShowActionSheet] = useState(false);
   const [targetTodo, setTargetTodo] = useState<number>(0);
-  const [editId, setEditId] = useState<number>(0);
-  const [editInputValue, setEditInputValue] = useState<string>("");
-  const [groupedItem, setGroupedItem] = useState<ITodo[]>([]);
-  const [showKeyboard, setShowKeyboard] = useState<boolean>(false)
+  const [showKeyboard, setShowKeyboard] = useState<boolean>(false);
+  const inputRef = useRef<HTMLIonInputElement>(null);
+  const [editFlag, setEditFlag] = useState<boolean>(false);
 
   const params: RouteParams = useParams();
 
@@ -69,32 +79,52 @@ const Todolist: React.FC = () => {
         setUsername(res);
       }
     });
-  }, [showKeyboard, editInputValue]);
+  }, [showKeyboard]);
 
   function handleAddTodo(value: string) {
-    const params: ITodo = {
-      username: username,
-      created_date: today,
-      text: value,
-      status: "pending",
-      month: month,
-      year: year,
-    };
+    if (!editFlag) {
+      const params: ITodo = {
+        username: username,
+        created_date: today,
+        text: value,
+        status: "pending",
+        month: month,
+        year: year,
+      };
 
-    postNewTodo(params)
-      .then((res) =>
-        getTodolistByDate(today)
-          .then((res) => {
-            setRes(res);
-            setInputvalue("");
-            setShowKeyboard(false);
-          })
-          .catch((err) => console.log(err))
-      )
-      .catch((err) => console.log(err));
+      postNewTodo(params)
+        .then((res) =>
+          getTodolistByDate(today)
+            .then((res) => {
+              setRes(res);
+              setInputvalue("");
+              setShowKeyboard(false);
+            })
+            .catch((err) => console.log(err))
+        )
+        .catch((err) => console.log(err));
+    } else {
+      if (inputValue) {
+        let editedTodo = todos.find((X) => X.id === targetTodo);
+        if (editedTodo) {
+          editedTodo = { ...editedTodo, text: inputValue };
+          updateTodo(targetTodo, editedTodo)
+            .then((res) =>
+              getTodolistByDate(today)
+                .then((res) => {
+                  setRes(res);
+                  setInputvalue("");
+                  setEditFlag(false);
+                })
+                .catch((err) => console.log(err))
+            )
+            .catch((err) => console.log(err));
+        }
+      }
+    }
   }
 
-  function handleChecked(value: number) {
+  function handleCompleted(value: number) {
     let checkedTodo = todos.find((X) => X.id === value);
 
     if (checkedTodo) {
@@ -160,38 +190,13 @@ const Todolist: React.FC = () => {
   }
 
   function handleEdit(value: number) {
-    if (editInputValue) {
-      let editedTodo = todos.find((X) => X.id === value);
+    console.log("clicked", inputRef);
+    inputRef.current?.setFocus();
 
-      if (editedTodo) {
-        editedTodo = { ...editedTodo, text: editInputValue };
-        updateTodo(value, editedTodo)
-          .then((res) =>
-            getTodolistByDate(today)
-              .then((res) => {
-                setRes(res);
-                setEditInputValue("");
-                setEditId(0);
-              })
-              .catch((err) => console.log(err))
-          )
-          .catch((err) => console.log(err));
-      }
-    }else{
-      setEditId(0)
-      setEditInputValue('')
-    }
-  }
-
-  function handleEditStatus(value: number) {
-    console.log('clicked', value);
-    
-    setEditId(value);
-  }
-
-  function handleActionsheet(e: any) {
-    setShowActionSheet(true);
-    setTargetTodo(e);
+    let editedTodo = todos.find((X) => X.id === value);
+    setInputvalue(editedTodo?.text!);
+    setTargetTodo(value);
+    setEditFlag(true);
   }
 
   function setRes(res: any) {
@@ -204,240 +209,139 @@ const Todolist: React.FC = () => {
     setDone(done);
   }
 
+  function handleClick(id: number, status: string) {
+    if (status === "pending" || status === "working") {
+      handleCompleted(id);
+    } else {
+      handlePending(id);
+    }
+  }
 
-  
+  function handleTodoToBacklog(value: number) {
+    const params = {
+      username: username,
+      text: todos.find((X) => X.id === value)?.text!,
+    };
+    deleteTodo(value)
+      .then((res) => {
+        postNewBacklog(params)
+          .then((res) => getTodolistByDate(today).then(
+            res => setRes(res)
+            
+          ))
+          .catch(err => console.log(err)
+          )
+          .catch((err) => console.log(err));
+      })
+      .catch((err) => console.log(err));
+  }
 
   return (
     <div id="todolist-component">
-      <IonCard>
-        <IonListHeader className="text-lg ">计划</IonListHeader>
-      
-        {pending.map((item) => (
-          <IonItem
-            lines="none"
-            key={item.id}
-          >
-            {editId === item.id ? (
-              <>
-                <IonCheckbox
-                  className="h-5 w-5"
-                  checked={checked}
-                  onIonChange={() => handleChecked(item.id!)}
-                ></IonCheckbox>
-                  <>
-                    <IonTextarea
-                      value={editInputValue}
-                      required
-                      placeholder={item.text}
-                      onIonInput={(e:any) => setEditInputValue(e.target.value)}
-                      // onIonChange={(e) => setEditInputValue(e.detail.value!)}
-                      onIonBlur={() => { handleEdit(item.id!); setEditInputValue('')}}
-                      onClick={() => handleEditStatus(item.id!)}
-                      autoGrow
-                    ></IonTextarea>
-                    <IonButton
-                      onClick={() => {
-                        setShowActionSheet(true);
-                        handleActionsheet(item.id)
+      <IonListHeader>
+        <div className="flex justify-between w-full items-center">
+          <h2 className="text-xl">今天</h2>
+          <IonButton routerLink="/backlog">所有计划</IonButton>
+        </div>
+      </IonListHeader>
 
-                      }}
-                    >
-                      <IonIcon icon="assets/icon/edit.svg"></IonIcon>
-                    </IonButton>
-                  </>
-              </>
-            ) : (
-              <>
-                <IonCheckbox
-                  className="h-5 w-5"
-                  checked={checked}
-                  onIonChange={() => handleChecked(item.id!)}
-                ></IonCheckbox>
-                  <>
-                    <IonTextarea
-                      autoGrow
-                      value={item.text}
-                      required
-                      placeholder={item.text}
-                      onClick={() => handleEditStatus(item.id!)}
-                    ></IonTextarea>
-                    <IonButton
-                      onClick={() => {
-                        setShowActionSheet(true);
-                        handleActionsheet(item.id)
+      {pending.map((item) => (
+        <IonItemSliding key={item.id}>
+          <IonItemOptions side="start" >
+            <IonItemOption color="success" onClick={() => handleWorking(item.id!)}>处理中</IonItemOption>
+            <IonItemOption color="secondary" onClick={()=> handleTodoToBacklog(item.id!)}>改天</IonItemOption>
+          </IonItemOptions>
 
-                      }}
-                    >
-                      <IonIcon icon="assets/icon/edit.svg"></IonIcon>
-                    </IonButton>
-                  </>
-              </>
-            )}
+          <IonItem>
+            <IonLabel onClick={() => handleClick(item.id!, item.status!)}>
+              {item.text}
+            </IonLabel>
           </IonItem>
-        ))}
-        <IonListHeader className="text-lg">正在处理</IonListHeader>
-        {working.map((item) => (
-           <IonItem
-           lines="none"
-           key={item.id}
-         >
-           {editId === item.id ? (
-             <>
-               <IonCheckbox
-                 className="h-5 w-5"
-                 checked={checked}
-                 onIonChange={() => handleChecked(item.id!)}
-               ></IonCheckbox>
-                 <>
-                   <IonTextarea
-                     value={editInputValue}
-                     required
-                     placeholder={item.text}
-                     onIonInput={(e:any) => setEditInputValue(e.target.value)}
-                     // onIonChange={(e) => setEditInputValue(e.detail.value!)}
-                     onIonBlur={() => { handleEdit(item.id!); setEditInputValue('')}}
-                     onClick={() => handleEditStatus(item.id!)}
-                     autoGrow
-                   ></IonTextarea>
-                   <IonButton
-                     onClick={() => {
-                       setShowActionSheet(true);
-                       handleActionsheet(item.id)
 
-                     }}
-                   >
-                     <IonIcon icon="assets/icon/edit.svg"></IonIcon>
-                   </IonButton>
-                 </>
-             </>
-           ) : (
-             <>
-               <IonCheckbox
-                 className="h-5 w-5"
-                 checked={checked}
-                 onIonChange={() => handleChecked(item.id!)}
-               ></IonCheckbox>
-                 <>
-                   <IonTextarea
-                     autoGrow
-                     value={item.text}
-                     required
-                     placeholder={item.text}
-                     onClick={() => handleEditStatus(item.id!)}
-                   ></IonTextarea>
-                   <IonButton
-                     onClick={() => {
-                       setShowActionSheet(true);
-                       handleActionsheet(item.id)
+          <IonItemOptions side="end">
+            <IonItemOption color="primary" onClick={() => handleEdit(item.id!)}>
+              编辑
+            </IonItemOption>
+            <IonItemOption
+              color="danger"
+              onClick={() => handleRemove(item.id!)}
+            >
+              删除
+            </IonItemOption>
+          </IonItemOptions>
+        </IonItemSliding>
+      ))}
+      {working.map((item) => (
+        <IonItemSliding key={item.id}>
+          <IonItemOptions side="start">
+            <IonItemOption
+              color="success"
+              onClick={() => handlePending(item.id!)}
+            >
+              计划
+            </IonItemOption>
+          </IonItemOptions>
 
-                     }}
-                   >
-                     <IonIcon icon="assets/icon/edit.svg"></IonIcon>
-                   </IonButton>
-                 </>
-             </>
-           )}
-         </IonItem>
-        ))}
-        <IonListHeader className="text-lg">完成</IonListHeader>
-        {done.map((item) => (
-           <IonItem
-           lines="none"
-           key={item.id}
-         >
-           {editId === item.id ? (
-             <>
-                 <>
-                   <IonTextarea
-                     value={editInputValue}
-                     required
-                     placeholder={item.text}
-                     onIonInput={(e:any) => setEditInputValue(e.target.value)}
-                     // onIonChange={(e) => setEditInputValue(e.detail.value!)}
-                     onIonBlur={() => { handleEdit(item.id!); setEditInputValue('')}}
-                     onClick={() => handleEditStatus(item.id!)}
-                     autoGrow
-                   ></IonTextarea>
-                   <IonButton
-                     onClick={() => {
-                       setShowActionSheet(true);
-                       handleActionsheet(item.id)
+          <IonItem>
+            <IonLabel onClick={() => handleClick(item.id!, item.status!)}>
+              {item.text}
+              <IonText className="text-xs bg-[#fdf6f0] ml-2">处理中</IonText>
+            </IonLabel>
+          </IonItem>
 
-                     }}
-                   >
-                     <IonIcon icon="assets/icon/edit.svg"></IonIcon>
-                   </IonButton>
-                 </>
-             </>
-           ) : (
-             <>
-                 <>
-                   <IonTextarea
-                     autoGrow
-                     value={item.text}
-                     required
-                     placeholder={item.text}
-                     onClick={() => handleEditStatus(item.id!)}
-                     className="line-through"
-                   ></IonTextarea>
-                   <IonButton
-                     onClick={() => {
-                       setShowActionSheet(true);
-                       handleActionsheet(item.id)
+          <IonItemOptions side="end">
+            <IonItemOption color="primary" onClick={() => handleEdit(item.id!)}>
+              编辑
+            </IonItemOption>
+            <IonItemOption
+              color="danger"
+              onClick={() => handleRemove(item.id!)}
+            >
+              删除
+            </IonItemOption>
+          </IonItemOptions>
+        </IonItemSliding>
+      ))}
+      {done.map((item) => (
+        <IonItemSliding key={item.id}>
+          <IonItemOptions side="start">
+            <IonItemOption color="success">处理中</IonItemOption>
+          </IonItemOptions>
 
-                     }}
-                   >
-                     <IonIcon icon="assets/icon/edit.svg"></IonIcon>
-                   </IonButton>
-                 </>
-             </>
-           )}
-         </IonItem>
-        ))}
-      </IonCard>
+          <IonItem>
+            <IonLabel
+              onClick={() => handleClick(item.id!, item.status!)}
+              className={item.status === "done" ? "line-through" : ""}
+            >
+              {item.text}
+            </IonLabel>
+          </IonItem>
+
+          <IonItemOptions side="end">
+            <IonItemOption color="primary" onClick={() => handleEdit(item.id!)}>
+              编辑
+            </IonItemOption>
+            <IonItemOption
+              color="danger"
+              onClick={() => handleRemove(item.id!)}
+            >
+              删除
+            </IonItemOption>
+          </IonItemOptions>
+        </IonItemSliding>
+      ))}
+
       <IonFooter>
-        <IonToolbar >
-        <Addtodo
-          handleAddTodo={handleAddTodo}
-          inputValue={inputValue}
-          setInputvalue={setInputvalue}
-          setShowKeyBoard ={setShowKeyboard}
-        />
+        <IonToolbar>
+          <Addtodo
+            handleAddTodo={handleAddTodo}
+            inputValue={inputValue}
+            setInputvalue={setInputvalue}
+            setShowKeyBoard={setShowKeyboard}
+            inputRef={inputRef}
+          />
         </IonToolbar>
       </IonFooter>
-     
-      <IonActionSheet
-        isOpen={showActionSheet}
-        onDidDismiss={() => setShowActionSheet(false)}
-        cssClass="action-sheet-class"
-        buttons={[
-          {
-            text: "添加到计划",
-            data: "Data value",
-            handler: () => {
-              handlePending(targetTodo);
-            },
-          },
-          {
-            text: "添加到处理中",
-            data: 10,
-            handler: () => {
-              handleWorking(targetTodo);
-            },
-          },
-          {
-            text: "删除",
-            role: "destructive",
-            id: "delete-button",
-            data: {
-              type: "delete",
-            },
-            handler: () => {
-              handleRemove(targetTodo);
-            },
-          },
-        ]}
-      ></IonActionSheet>
     </div>
   );
 };

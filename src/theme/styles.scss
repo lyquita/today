@@ -51,3 +51,9 @@
           
       }
   }
+
+  .menu-nav{
+    &::part(container){
+      width: 40vw;
+    }
+  }

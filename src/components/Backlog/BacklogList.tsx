@@ -1,6 +1,7 @@
 import {
   IonActionSheet,
   IonButton,
+  IonButtons,
   IonCard,
   IonCheckbox,
   IonCol,
@@ -9,6 +10,9 @@ import {
   IonIcon,
   IonInput,
   IonItem,
+  IonItemOption,
+  IonItemOptions,
+  IonItemSliding,
   IonLabel,
   IonList,
   IonListHeader,
@@ -17,7 +21,7 @@ import {
   IonRow,
   IonText,
 } from "@ionic/react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   deleteBacklog,
   getBackloglist,
@@ -48,55 +52,89 @@ const BacklogList = () => {
   const [selectedDate, setSelectedDate] = useState<string>("");
   const [showNewTodoAlert, setShowNewTodoAlert] = useState<boolean>(false);
   const [showEmptyDateAlert, setShowEmptyDateAlert] = useState<boolean>(false);
+  const [editFlag, setEditFlag] = useState<boolean>(false);
+  const inputRef = useRef<HTMLIonInputElement>(null);
 
   function handleAddBacklog() {
-    const params: IBacklog = {
-      username: username,
-      text: inputValue,
-    };
+    if (!editFlag) {
+      const params: IBacklog = {
+        username: username,
+        text: inputValue,
+      };
 
-    postNewBacklog(params)
-      .then((res) => {
-        setInputvalue("");
+      postNewBacklog(params)
+        .then((res) => {
+          setInputvalue("");
 
-        setRenderflag(!renderFlag);
-      })
-      .catch((err) => console.log(err));
-  }
+          setRenderflag(!renderFlag);
+        })
+        .catch((err) => console.log(err));
+    } else {
+      if (inputValue) {
+        let editedBacklog = backlogList.find((x) => x.id === targetBacklog);
 
-  function handleActionsheet(e: any) {
-    setShowActionSheet(true);
-    setTargetBacklog(e);
-  }
+        if (editedBacklog) {
+          editedBacklog = { ...editedBacklog, text: inputValue };
 
-  function handleEditStatus(value: number) {
-    setEditid(value);
-  }
-
-  function handleEdit(value: number) {
-    if (editInputValue) {
-      let editedBacklog = backlogList.find((x) => x.id === value);
-
-      if (editedBacklog) {
-        editedBacklog = { ...editedBacklog, text: editInputValue };
-
-        updateBacklog(value, editedBacklog)
-          .then((res) => {
-            setRenderflag(!renderFlag);
-            setEditid(0);
-            setEditInputValue("");
-          })
-          .catch((err) => console.log(err));
+          updateBacklog(targetBacklog, editedBacklog)
+            .then((res) => {
+              setRenderflag(!renderFlag);
+              setInputvalue("");
+            })
+            .catch((err) => console.log(err));
+        }
       }
     }
   }
 
-  function handleSave() {
+  function handleSchedule(value:number){
+    setShowpopover(true)
+    setEditid(value);
+  }
 
+
+  function handleEdit(value: number) {
+    inputRef.current?.setFocus();
+
+    let editedBacklog = backlogList.find((X) => X.id === value);
+    setInputvalue(editedBacklog?.text!);
+    setTargetBacklog(value);
+    setEditFlag(true);
+  }
+
+  function handleAddToTodo(value:number) {
+      const newTodo = backlogList.find((x) => x.id === value);
+
+      const params: ITodo = {
+        created_date: moment().format('yyyy-MM-DD'),
+        username: username,
+        text: newTodo?.text || "",
+        status: "pending",
+        month: moment().format("MM"),
+        year: moment().format("yyyy"),
+      };
+
+      postNewTodo(params)
+        .then((res) =>
+          deleteBacklog(value)
+            .then((res) => {
+              setRenderflag(!renderFlag);
+              setSelectedDate("");
+              setShowNewTodoAlert(true);
+            })
+            .catch((err) => console.log(err))
+        )
+        .catch((err) => console.log(err));
+
+      setShowpopover(false);
+    
+  }
+
+  function handleOnSave(){
     if(!selectedDate){
       setShowEmptyDateAlert(true)
     }else{
-      const newTodo = backlogList.find((x) => x.id === targetBacklog);
+      const newTodo = backlogList.find((x) => x.id === editId);
 
       const params: ITodo = {
         created_date: selectedDate,
@@ -109,7 +147,7 @@ const BacklogList = () => {
   
       postNewTodo(params)
         .then((res) =>
-          deleteBacklog(targetBacklog)
+          deleteBacklog(editId)
             .then((res) => {
               setRenderflag(!renderFlag);
               setSelectedDate('');
@@ -121,8 +159,6 @@ const BacklogList = () => {
   
       setShowpopover(false);
     }
-
-   
   }
 
   function handleRemove(value: number) {
@@ -151,58 +187,44 @@ const BacklogList = () => {
 
   return (
     <div id="backlog-list">
-      <IonCard>
-        <IonList>
-          {backlogList.map((backlog) => (
-            <IonItem
-              lines="none"
-              key={backlog.id}
-              onClick={() => handleEditStatus(backlog.id!)}
-            >
-              {editId !== backlog.id ? (
-                <>
-                  <IonInput
-                    value={backlog.text}
-                    placeholder={backlog.text}
-                    onIonBlur={() => handleEdit(backlog.id!)}
-                  />
-                  <IonButton
-                    onClick={() => {
-                      setShowActionSheet(true);
-                      handleActionsheet(backlog.id);
-                    }}
-                  >
-                    <IonIcon icon="assets/icon/edit.svg"></IonIcon>
-                  </IonButton>
-                </>
-              ) : (
-                <>
-                  <IonInput
-                    placeholder={backlog.text}
-                    onIonChange={(e) => setEditInputValue(e.detail.value!)}
-                    value={editInputValue}
-                    required
-                    onIonBlur={() => handleEdit(backlog.id!)}
-                  ></IonInput>
-                  <IonButton
-                    onClick={() => {
-                      setShowActionSheet(true);
-                      handleActionsheet(backlog.id);
-                    }}
-                  >
-                    <IonIcon icon="assets/icon/edit.svg"></IonIcon>
-                  </IonButton>
-                </>
-              )}
+      <IonList>
+        {backlogList.map((backlog) => (
+          <IonItemSliding key={backlog.id}>
+            <IonItem>
+              <IonLabel>{backlog.text}</IonLabel>
+              <IonButtons>
+                <IonButton onClick={()=> handleAddToTodo(backlog.id!)}>
+                  <IonIcon icon="assets/icon/add.svg"></IonIcon>
+                </IonButton>
+                <IonButton onClick={()=> handleSchedule(backlog.id!)}>
+                  <IonIcon icon="assets/icon/calendar.svg"></IonIcon>
+                </IonButton>
+              </IonButtons>
             </IonItem>
-          ))}
-        </IonList>
-        <Addbacklog
-          inputValue={inputValue}
-          setInputvalue={setInputvalue}
-          handleAddBacklog={handleAddBacklog}
-        />
-      </IonCard>
+
+            <IonItemOptions side="end">
+              <IonItemOption
+                color="primary"
+                onClick={() => handleEdit(backlog.id!)}
+              >
+                编辑
+              </IonItemOption>
+              <IonItemOption
+                color="danger"
+                onClick={() => handleRemove(backlog.id!)}
+              >
+                删除
+              </IonItemOption>
+            </IonItemOptions>
+          </IonItemSliding>
+        ))}
+      </IonList>
+      <Addbacklog
+        inputValue={inputValue}
+        setInputvalue={setInputvalue}
+        handleAddBacklog={handleAddBacklog}
+        inputRef={inputRef}
+      />
       <IonPopover isOpen={showPopover} className="calendar-popover">
         <IonDatetime
           presentation="date"
@@ -211,64 +233,45 @@ const BacklogList = () => {
             setSelectedDate(moment(e.detail.value).format("yyyy-MM-DD"))
           }
         ></IonDatetime>
-        <IonButton className="save" onClick={handleSave}>
+        <IonButton className="save" onClick={()=> handleOnSave()}>
           Save
         </IonButton>
         <IonButton>Cancel</IonButton>
       </IonPopover>
-      <IonActionSheet
-        isOpen={showActionSheet}
-        onDidDismiss={() => setShowActionSheet(false)}
-        cssClass="action-sheet-class"
-        buttons={[
-          {
-            text: "设置日期",
-            handler: () => setShowpopover(true),
-          },
-          {
-            text: "删除",
-            role: "destructive",
-            id: "delete-button",
-            data: {
-              type: "delete",
-            },
-            handler: () => {
-              handleRemove(targetBacklog);
-            },
-          },
-        ]}
-      ></IonActionSheet>
 
       {showNewTodoAlert ? (
         <Alert
           isOpen={showNewTodoAlert}
           message={`已经添加到了${selectedDate} 计划中~`}
-          buttons={[{
-            text:'我知道了',
-            handler:()=>{
-              setShowNewTodoAlert(false)
-            }
-          }]}
+          buttons={[
+            {
+              text: "我知道了",
+              handler: () => {
+                setShowNewTodoAlert(false);
+              },
+            },
+          ]}
         />
       ) : (
         ""
       )}
 
-
-      {
-        showEmptyDateAlert? (
-          <Alert 
-          isOpen= {showEmptyDateAlert}
+      {showEmptyDateAlert ? (
+        <Alert
+          isOpen={showEmptyDateAlert}
           message="请选择日期"
-          buttons={[{
-            text:'我知道了',
-            handler:()=> { 
-              setShowEmptyDateAlert(false)
-            }
-          }]}
-          />
-        ): ''
-      }
+          buttons={[
+            {
+              text: "我知道了",
+              handler: () => {
+                setShowEmptyDateAlert(false);
+              },
+            },
+          ]}
+        />
+      ) : (
+        ""
+      )}
     </div>
   );
 };
