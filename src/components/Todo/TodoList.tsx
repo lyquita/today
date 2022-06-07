@@ -271,6 +271,7 @@ const Todolist: React.FC = () => {
           </IonItemOptions>
         </IonItemSliding>
       ))}
+
       {working.map((item) => (
         <IonItemSliding key={item.id}>
           <IonItemOptions side="start">
@@ -302,6 +303,7 @@ const Todolist: React.FC = () => {
           </IonItemOptions>
         </IonItemSliding>
       ))}
+      
       {done.map((item) => (
         <IonItemSliding key={item.id}>
           <IonItemOptions side="start">
