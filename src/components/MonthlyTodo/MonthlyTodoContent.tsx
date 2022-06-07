@@ -17,7 +17,13 @@ import { useEffect, useState } from "react";
 import { getTodolistByMonth, ITodo } from "../../services/todolist";
 import "./monthlyTodoContent.scss";
 
-const MonthlyTodoContent = () => {
+interface IProps{
+  month: string,
+  date: string
+}
+
+
+const MonthlyTodoContent:React.FC<IProps> = ({month, date}) => {
   interface IMonthIterm {
     created_date: string;
     data: ITodo[];
@@ -33,13 +39,16 @@ const MonthlyTodoContent = () => {
   const [thirdWeekList, setThirdWeekList] = useState<IMonthIterm[]>([]);
   const [forthWeekList, setForthWeekList] = useState<IMonthIterm[]>([]);
 
-  const currentMonth = moment().format("MM");
   const today = moment().format('DD')
 
   useEffect(() => {
-    getTodolistByMonth(currentMonth)
+    getTodolistByMonth(month)
       .then((res) => {
         let expectedData = [];
+        let firstWeekArr = [];
+        let secondWeekArr = [];
+        let thirdWeekArr = [];
+        let forthWeekArr = [];
         let temArr = [];
         const data = res.data;
 
@@ -69,39 +78,46 @@ const MonthlyTodoContent = () => {
     
 
         for( let m = 0; m < expectedData.length; m++){
+
           if (parseInt(moment(expectedData[m]["created_date"]).format("DD")) <= 7) {
-                      firstWeekList.push(expectedData[m]);
+                      firstWeekArr.push(expectedData[m]);
                     } else if (
                       7 < parseInt(moment(expectedData[m]["created_date"]).format("DD")) &&
                       parseInt(moment(expectedData[m]["created_date"]).format("DD")) <= 14
                     ) {
-                      secondWeekList.push(expectedData[m]);
+                      secondWeekArr.push(expectedData[m]);
                     } else if (
                       14 < parseInt(moment(expectedData[m]["created_date"]).format("DD")) &&
                       parseInt(moment(expectedData[m]["created_date"]).format("DD")) <= 21
                     ) {
-                      thirdWeekList.push(expectedData[m]);
+                      thirdWeekArr.push(expectedData[m]);
                     } else{
-                      forthWeekList.push(expectedData[m])
+                      forthWeekArr.push(expectedData[m])
                     }
         }
+
+        setFirstWeekList(firstWeekArr);
+        setSecondWeekList(secondWeekArr);
+        setThirdWeekList(thirdWeekArr);
+        setForthWeekList(forthWeekArr);
+        console.log('first', firstWeekArr, secondWeekArr);
         
         if(parseInt(today) <= 7){
-          setListData(firstWeekList)
+          setListData(firstWeekArr)
           setFirstWeek(true)
         }else if(7 < parseInt(today) && parseInt(today) <= 14){
-          setListData(secondWeekList)
+          setListData(secondWeekArr)
           setSecondWeek(true)
         }else if(14< parseInt(today) && parseInt(today) <= 21){
-          setListData(thirdWeekList)
+          setListData(thirdWeekArr)
           setThirdWeek(true)
         }else{
-          setListData(forthWeekList)
+          setListData(forthWeekArr)
           setForthWeek(true)
         }
       })
       .catch((err) => console.log(err));
-  }, []);
+  }, [month]);
 
   // useEffect(() => {
   //   getTodolistByMonth(currentMonth)

@@ -4,7 +4,6 @@
       --width: 170px;
   
     &::part(content){
-        width: auto;
         position: static;
     }
 
