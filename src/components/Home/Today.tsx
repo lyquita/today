@@ -62,7 +62,7 @@ const Today: React.FC<IProps> = ({
             <h2>今天要做的事</h2>
           </IonText>
         </IonItem>
-        <IonItem lines="none">
+        <IonItem lines="none" routerLink="/emotion">
           <IonRow>
             <IonCol>
               <IonText>

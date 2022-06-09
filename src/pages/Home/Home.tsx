@@ -16,7 +16,7 @@ import {
   IonToolbar,
   RefresherEventDetail,
 } from "@ionic/react";
-import { add } from 'ionicons/icons';
+import { add } from "ionicons/icons";
 import moment from "moment";
 import { useContext, useEffect, useState } from "react";
 import Greeting from "../../components/Home/Greeting";
@@ -137,11 +137,7 @@ const Home: React.FC = () => {
 
   return (
     <IonPage id="home-page">
-      <Menu  
-          setLogin={setLogin}
-          login={login}
-      
-      />
+      <Menu setLogin={setLogin} login={login} />
       <IonContent id="menu">
         <IonRefresher slot="fixed" onIonRefresh={doRefresh}>
           <IonRefresherContent
@@ -164,15 +160,9 @@ const Home: React.FC = () => {
           setLogin={setLogin}
         />
       </IonContent>
-      <IonFab vertical="bottom" horizontal="end" slot="fixed">
-          <IonFabButton>
-            <IonIcon icon={add} />
-          </IonFabButton>
-          </IonFab>
       <IonFooter className="ion-no-border">
         <IonToolbar>
           <IonMenuButton slot="start" />
-          
         </IonToolbar>
       </IonFooter>
     </IonPage>

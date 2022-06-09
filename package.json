@@ -27,6 +27,8 @@
     "jwt-decode": "^3.1.2",
     "moment": "^2.29.3",
     "react": "^17.0.1",
+    "react-big-calendar": "^0.40.1",
+    "react-calendar": "^3.7.0",
     "react-dom": "^17.0.1",
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
@@ -74,6 +76,8 @@
   "description": "An Ionic project",
   "devDependencies": {
     "@capacitor/cli": "3.5.1",
+    "@types/react-big-calendar": "^0.38.0",
+    "@types/react-calendar": "^3.5.1",
     "node-sass": "^7.0.1",
     "tailwindcss": "^3.0.24"
   }
