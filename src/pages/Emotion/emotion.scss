@@ -1,0 +1,23 @@
+#emotion-page{
+    padding: 20px;
+    ion-header{
+        ion-toolbar{
+            --background: white;
+            ion-button{
+                margin: 0;
+                --box-shadow: none;
+                --background: white;
+                color: black;
+                ion-back-button{
+                    --color: black;
+                }
+            }
+
+        }
+    }
+    ion-fab{
+        ion-fab-button{
+            --background:#fcd8d4;
+        }
+    }
+}

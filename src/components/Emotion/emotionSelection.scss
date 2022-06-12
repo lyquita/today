@@ -1,0 +1,18 @@
+ion-row{
+   ion-col{
+       display: flex;
+       justify-content: center;
+       align-items: center;
+
+       ion-button{
+           --background: #fdf6f0;
+           --box-shadow: none;
+           height: auto;
+
+           ion-icon{
+               width: 60px;
+               height:60px
+           }
+       }
+   }
+}

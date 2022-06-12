@@ -1,100 +1,234 @@
-
-
-.react-calendar { 
-    max-width: 100%;
-    background-color: #fff;
-    color: #222;
-    border-radius: 8px;
-    font-family: Arial, Helvetica, sans-serif;
-    line-height: 1.125em;
-    margin: 20px;
-   }
-   .react-calendar__navigation{
-       display: flex;
-       margin: 3rem 0;
-   }
-   .react-calendar__navigation button {
-    color: #6f48eb;
-    min-width: 44px;
-    background: none;
+:root {
+    --black: rgb(58, 58, 58);
+    --grey: rgb(205, 205, 205);
+    --white: rgb(240, 240, 240);
+    --red: rgb(206, 36, 36);
+    --light-blue: rgb(102, 193, 255);
+    --font-light: "AirbnbCerealLight", sans-serif;
+    --font-book: "AirbnbCerealBook", sans-serif;
+    --font-black: "AirbnbCerealBlack", sans-serif;
+    color: var(--black);
+    font-family: var(--font-light);
     font-size: 16px;
-    margin-top: 8px;
-   }
-   .react-calendar__navigation button:enabled:hover,
-   .react-calendar__navigation button:enabled:focus {
-    background-color: #f8f8fa;
-   }
-   .react-calendar__navigation button[disabled] {
-    background-color: #f0f0f0;
-   }
-   abbr[title] {
-    text-decoration: none;
-   }
-   /* .react-calendar__month-view__days__day--weekend {
-    color: #d10000;
-   } */
-   .react-calendar__tile:enabled:hover,
-   .react-calendar__tile:enabled:focus {
-    background: #f8f8fa;
-    color: #6f48eb;
-    border-radius: 6px;
-   }
-   .react-calendar__tile--now {
-    background: #6f48eb33;
-    border-radius: 6px;
-    font-weight: bold;
-    color: #6f48eb;
-   }
-   .react-calendar__tile{
-       height: 60px;
-   }
-   .react-calendar__tile--now:enabled:hover,
-   .react-calendar__tile--now:enabled:focus {
-    background: #6f48eb33;
-    border-radius: 6px;
-    font-weight: bold;
-    color: #6f48eb;
-   }
-   .react-calendar__tile--hasActive:enabled:hover,
-   .react-calendar__tile--hasActive:enabled:focus {
-    background: #f8f8fa;
-   }
-   .react-calendar__tile--active {
-    background: #6f48eb;
-    border-radius: 6px;
-    font-weight: bold;
-    color: white;
-   }
-   .react-calendar__tile--active:enabled:hover,
-   .react-calendar__tile--active:enabled:focus {
-    background: #6f48eb;
-    color: white;
-   }
-   .react-calendar--selectRange .react-calendar__tile--hover {
-    background-color: #f8f8fa;
-   }
-   .react-calendar__tile--range {
-    background: #f8f8fa;
-    color: #6f48eb;
-    border-radius: 0;
-   }
-   .react-calendar__tile--rangeStart {
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
-    border-top-left-radius: 6px;
-    border-bottom-left-radius: 6px;
-    background: #6f48eb;
-    color: white;
-   }
-   .react-calendar__tile--rangeEnd {
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
-    border-top-right-radius: 6px;
-    border-bottom-right-radius: 6px;
-    background: #6f48eb;
-    color: white;
-   }
-   .react-calendar__month-view__weekdays{
-       display: none !important;
-   }
+    text-rendering: optimizeLegibility;
+    -moz-osx-font-smoothing: grayscale;
+    font-smoothing: antialiased;
+    -webkit-font-smoothing: antialiased;
+  }
+
+.calendar {
+    box-sizing: border-box;
+    font-size: 1rem;
+    max-width: 400px;
+    margin: 0 auto;
+  }
+  
+  .calendar .header {
+    text-align: center;
+    min-height: 2rem;
+    line-height: 2rem;
+    color: var(--black);
+    font-family: var(--font-book);
+    font-weight: 700;
+    display: flex;
+    margin: 2rem 0;
+  }
+  
+  .calendar .day-names {
+    display: flex;
+    flex-wrap: wrap;
+    max-width: 1000px;
+    margin: 0 auto;
+    align-items: center;
+  }
+  
+  .calendar .body {
+
+  }
+  
+  .calendar .header .previous {
+    flex: 1;
+    text-align: left;
+    margin-left: 1rem;
+  }
+  
+  .calendar .header .next {
+    flex: 1;
+    text-align: right;
+    margin-right: 1rem;
+  }
+  
+  .calendar .week {
+    background-color: white;
+    width: calc(100% / 7);
+    height: 44px;
+    line-height: 44px;
+    text-align: center;
+    text-transform: uppercase;
+    color: var(--black);
+    font-weight: 400;
+  }
+  .calendar .week div {
+    width: 100%;
+  }
+  
+  .calendar .day {
+    position: relative;
+    width: calc(100% / 7);
+    height: 44px;
+    display: inline-block;
+    background-color: white;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    z-index: 1;
+    text-align: center;
+  }
+  
+  .calendar .day div {
+    width: 40px;
+    border-radius: 50%;
+    height: 40px;
+    position: relative;
+    text-align: center;
+    color: var(--black);
+    line-height: 40px;
+    z-index: 100;
+  }
+  
+  .calendar .day div.after {
+    color: var(--grey);
+  }
+  
+  .calendar .day div.selected {
+    background-color: #fcd8d4;
+    color:white
+
+
+  }
+  
+  .calendar .day div.today {
+    border: 1px solid blue;
+    color: black
+  }
+
+  .thinking{
+    background-image: url("../../../public/assets/icon/emotion/thinking.svg") ;
+    background-repeat: no-repeat;
+    background-size: 30px;
+    background-position: center;
+    color: transparent !important;
+  }
+
+  .happy{
+    background-image: url("../../../public/assets/icon/emotion/happy.svg") ;
+    background-repeat: no-repeat;
+    background-size: 30px;
+    background-position: center;
+    color: transparent !important;
+  }
+
+  .angry{
+    background-image: url("../../../public/assets/icon/emotion/angry.svg") ;
+    background-repeat: no-repeat;
+    background-size: 30px;
+    background-position: center;
+    color: transparent !important;
+  }
+
+  .confuse{
+    background-image: url("../../../public/assets/icon/emotion/confuse.svg") ;
+    background-repeat: no-repeat;
+    background-size: 30px;
+    background-position: center;
+    color: transparent !important;
+  }
+
+  .cry{
+    background-image: url("../../../public/assets/icon/emotion/cry.svg") ;
+    background-repeat: no-repeat;
+    background-size: 30px;
+    background-position: center;
+    color: transparent !important;
+  }
+
+  .depressed{
+    background-image: url("../../../public/assets/icon/emotion/depressed.svg") ;
+    background-repeat: no-repeat;
+    background-size: 30px;
+    background-position: center;
+    color: transparent !important;
+  }
+
+  .dizzy{
+    background-image: url("../../../public/assets/icon/emotion/dizzy.svg") ;
+    background-repeat: no-repeat;
+    background-size: 30px;
+    background-position: center;
+    color: transparent !important;
+  }
+
+  .face-without-mouth{
+    background-image: url("../../../public/assets/icon/emotion/face-without-mouth.svg") ;
+    background-repeat: no-repeat;
+    background-size: 30px;
+    background-position: center;
+    color: transparent !important;
+  }
+
+  .grining-face{
+    background-image: url("../../../public/assets/icon/emotion/grining-face.svg") ;
+    background-repeat: no-repeat;
+    background-size: 30px;
+    background-position: center;
+    color: transparent !important;
+  }
+
+  .pouting-face{
+    background-image: url("../../../public/assets/icon/emotion/pouting-face.svg") ;
+    background-repeat: no-repeat;
+    background-size: 30px;
+    background-position: center;
+    color: transparent !important;
+  }
+
+  .revise-smile{
+    background-image: url("../../../public/assets/icon/emotion/revise-smile.svg") ;
+    background-repeat: no-repeat;
+    background-size: 30px;
+    background-position: center;
+    color: transparent !important;
+  }
+
+  .slight-smile{
+    background-image: url("../../../public/assets/icon/emotion/slight-smile.svg") ;
+    background-repeat: no-repeat;
+    background-size: 30px;
+    background-position: center;
+    color: transparent !important;
+  }
+
+  .unhappy{
+    background-image: url("../../../public/assets/icon/emotion/unhappy.svg") ;
+    background-repeat: no-repeat;
+    background-size: 30px;
+    background-position: center;
+    color: transparent !important;
+  }
+
+  .wink{
+    background-image: url("../../../public/assets/icon/emotion/wink.svg") ;
+    background-repeat: no-repeat;
+    background-size: 30px;
+    background-position: center;
+    color: transparent !important;
+  }
+
+
+
+
+
+
+
+
 
