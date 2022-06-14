@@ -47,6 +47,7 @@ const Today: React.FC<IProps> = ({
     clearStorage();
     setLogin(false);
   };
+  
 
   useEffect(() => {}, [showLogoutAlert, login]);
 

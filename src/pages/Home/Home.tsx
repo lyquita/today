@@ -44,6 +44,13 @@ const Home: React.FC = () => {
   useEffect(() => {
     GenerateGreeting();
 
+
+  // check login status
+  getStorage("hasLoggedIn").then((res) => {
+    if (res) {
+      setLogin(true);
+    }
+  });
     // get username by userid
     getStorage("user_id")
       .then((res) => {
@@ -97,14 +104,8 @@ const Home: React.FC = () => {
         setInprogressAmount(0);
         setDoneAmount(0);
       });
-  }, [renderFlag, login, doneAmount, todoAmount, inprogressAmount]);
+  }, [renderFlag, login, doneAmount, todoAmount, inprogressAmount, state.user.isLoggedin]);
 
-  // check login status
-  getStorage("hasLoggedIn").then((res) => {
-    if (res) {
-      setLogin(true);
-    }
-  });
 
   function GenerateGreeting() {
     const currentHour = moment().format("HH");

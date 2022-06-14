@@ -13,29 +13,30 @@ import {
 } from "@ionic/react";
 import { add } from "ionicons/icons";
 import moment from "moment";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useHistory } from "react-router";
 import CalendarComponent from "../../components/Emotion/Calendar";
+import DeleteEmotion from "../../components/Emotion/DeleteEmotion";
+import { AppContext } from "../../data/AppContext";
 import { getEmotionList, IEmotion } from "../../services/emotion";
 import "./emotion.scss";
 const EmotionPage = () => {
   const [value, setValue] = useState(moment());
-  const history = useHistory()
-  const [emotionList, setEmotionList] = useState<IEmotion[]>([
-    {
-      id:0,
-      username:'hireoo',
-      date :'2022-06-10',
-      emo :'happy'
-    }
-  ]);
-  const [renderFlag, setRenderFlag] = useState<boolean>(false)
+  const history = useHistory<{ emotionList?: IEmotion[], prev?:string }>()
+  const {state, dispatch} = useContext(AppContext);
+  const [emotionList, setEmotionList] = useState<IEmotion[]>([]);
+
+ 
 
   useEffect(() => {
     getEmotionList().then((res) => setEmotionList(res.data));
-  }, [renderFlag]);
+    dispatch({
+      type: "update-emo",
+      isUpdated: false
+    })
+  }, [state.emotion.isUpdated])
 
- console.log('e', emotionList);
+
  
   return (
     <IonPage id="emotion-page">
@@ -48,8 +49,7 @@ const EmotionPage = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent>
-        <CalendarComponent value={value} onChange={setValue} emotionList={emotionList}/>
-      </IonContent>
+        <CalendarComponent value={value} onChange={setValue} emotionList={emotionList} />      </IonContent>
       <IonFab vertical="bottom" horizontal="center">
         <IonFabButton onClick={() => history.push({pathname: `/create-emotion/${value.clone().format('yyyy-MM-DD')}`, state:{emotionList}}) } >
           <IonIcon icon={add} />

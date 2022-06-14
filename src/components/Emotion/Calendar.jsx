@@ -13,12 +13,13 @@ import { useEffect, useState } from "react";
 import "./calendar.scss";
 import buildCalendar from "./buildCalendar";
 import Header from "./header";
+import { useHistory } from "react-router";
 
 
 
 const CalendarComponent = ({value, onChange, emotionList}) => {
   const [calendar, setCalendar] = useState([]);
-
+  const history = useHistory()
 function isSelected(day,value){
     return value.isSame(day, 'day')
   }
@@ -58,7 +59,7 @@ function afterToday(day){
                 className="day"
                 onClick={() => !afterToday(day) && onChange(day)}
               >
-                <div className={dayStyles(day, value)}>
+                <div className={dayStyles(day, value)} onClick={() => history.push({pathname: `/create-emotion/${day.clone().format('yyyy-MM-DD')}`, state:{emotionList}}) }>
                   {day.format("D").toString()}
                 </div>
               </div>
