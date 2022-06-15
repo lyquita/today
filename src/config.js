@@ -14,26 +14,20 @@ axios.defaults.baseURL = "https://api-blog.hireoo.fun/";
 // check auth before send request
 axios.interceptors.request.use( async function(config){
     const token = await getStorage('access_token');
-    const refreshToken = await getStorage('refresh_token');
 
     config.headers.Authorization = token ?  `Bearer ${token}` : '';
-    const user = jwt_decode(token)
-    const isExpired = moment.unix(user.exp).diff(moment()) < 1
-
-    console.log('isExpired', isExpired);
-    if(!isExpired) return config
-    // await setStorage("access_token", response.data.access)
-
-    // config.headers.Authorization = token ?  `Bearer ${response.data.access}` : '';
-
-
     return config;
 })
 
-axios.interceptors.response.use(response => response, async err => {
+axios.interceptors.response.use(response => {
+    console.log('respnse', response)
+    return response
+
+ }, async err => {
     const originalRequest = err.config;
     const refreshToken = await getStorage('refresh_token');
 
+    console.log(err);
 
     if( err.response.status === 401 && err.response.statusText === 'Unauthorized'){
         return axios.post('users/token/refresh/', {refresh: refreshToken}).then(
