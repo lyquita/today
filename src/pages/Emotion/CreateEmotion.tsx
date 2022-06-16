@@ -2,7 +2,11 @@ import {
   IonBackButton,
   IonButton,
   IonContent,
+  IonFab,
+  IonFabButton,
+  IonFooter,
   IonHeader,
+  IonIcon,
   IonPage,
   IonText,
   IonTitle,
@@ -20,6 +24,7 @@ import { useContext, useEffect, useState } from "react";
 import { getStorage } from "../../services/localStorage";
 import { AppContext } from "../../data/AppContext";
 import DeleteEmotion from "../../components/Emotion/DeleteEmotion";
+import Diary from "./Diary";
 
 interface RouteParams {
   date: string;
@@ -30,11 +35,24 @@ const CreateEmotion = () => {
   const { state, dispatch } = useContext(AppContext);
   const routerparams: RouteParams = useParams();
   const history = useHistory<{ emotionList?: IEmotion[] }>();
+  const [selectedMood, setSelectedMood] = useState<string | null>(null);
+  const [selectedMoodName, setSelectedMoodName] = useState<string | null> (null);
+  const [autoFocus, setAutoFocus] = useState<boolean>(false);
+  const [userInput, setUserInput] = useState<string>('');
 
-  function handleClick(value: string) {
-    const emotionList = history.location.state.emotionList;
+
+  console.log('userinput', userInput)
+
+  function handleClick(value: string, url: string) {
     console.log("eee", history.location.state);
+    console.log("value", value);
+    setSelectedMood(url);
+    setSelectedMoodName(value);
+    setAutoFocus(true);
+  }
 
+  function handleSubmit(){
+    const emotionList = history.location.state.emotionList;
     if (emotionList) {
       if (emotionList.find((x) => x.date === routerparams.date)) {
         const id = emotionList.find((x) => x.date === routerparams.date)?.id!;
@@ -42,20 +60,24 @@ const CreateEmotion = () => {
           username: emotionList.find((x) => x.date === routerparams.date)
             ?.username!,
           date: emotionList.find((x) => x.date === routerparams.date)?.date!,
-          emo: value,
+          emo: selectedMoodName!,
+          text: userInput
         };
         updateEmotion(id, params).then((res) => {
           dispatch({
             type: "update-emo",
             isUpdated: true,
           });
+          setSelectedMood(null)
+          setSelectedMoodName(null)
           history.push({ pathname: "/emotion" });
         });
       } else {
         const params: IEmotion = {
           username: username,
           date: routerparams.date,
-          emo: value,
+          emo: selectedMoodName!,
+          text: userInput
         };
         postNewEmotion(params)
           .then((res) => {
@@ -63,6 +85,8 @@ const CreateEmotion = () => {
               type: "update-emo",
               isUpdated: true,
             });
+          setSelectedMood(null);
+          setSelectedMoodName(null);
             history.push("/emotion");
           })
           .catch((err) => console.log(err));
@@ -90,9 +114,25 @@ const CreateEmotion = () => {
       </IonHeader>
       <IonContent>
         <IonText>今天心情怎么样~</IonText>
-        <EmotionSelection handleClick={handleClick} />
-        {/* <DeleteEmotion /> */}
+        <EmotionSelection
+          handleClick={handleClick}
+          selectedMood={selectedMood}
+        />
+        {selectedMood ? (
+          <Diary setAutoFocus={setAutoFocus} autoFocus={autoFocus} userInput={userInput} setUserInput={setUserInput} />
+        ) : (
+          ""
+        )}
       </IonContent>
+      {selectedMood ? (
+        <IonFab vertical="bottom" horizontal="center" onClick={()=> handleSubmit()}>
+          <IonFabButton>
+            <IonIcon icon="assets/icon/submit.svg" />
+          </IonFabButton>
+        </IonFab>
+      ) : (
+        ""
+      )}
     </IonPage>
   );
 };

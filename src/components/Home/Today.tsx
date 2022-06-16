@@ -67,7 +67,7 @@ const Today: React.FC<IProps> = ({
           <IonRow>
             <IonCol>
               <IonText>
-                <h2>关于今天的心情</h2>
+                <h2>心情树洞</h2>
               </IonText>
             </IonCol>
             <IonCol>
