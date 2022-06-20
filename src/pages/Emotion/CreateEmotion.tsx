@@ -39,9 +39,9 @@ const CreateEmotion = () => {
   const [selectedMoodName, setSelectedMoodName] = useState<string | null> (null);
   const [autoFocus, setAutoFocus] = useState<boolean>(false);
   const [userInput, setUserInput] = useState<string>('');
+  const emotionList:IEmotion[] = state.emotion.emotionList
 
 
-  console.log('userinput', userInput)
 
   function handleClick(value: string, url: string) {
     console.log("eee", history.location.state);
@@ -52,7 +52,7 @@ const CreateEmotion = () => {
   }
 
   function handleSubmit(){
-    const emotionList = history.location.state.emotionList;
+    const emotionList:IEmotion[] = state.emotion.emotionList
     if (emotionList) {
       if (emotionList.find((x) => x.date === routerparams.date)) {
         const id = emotionList.find((x) => x.date === routerparams.date)?.id!;
@@ -100,6 +100,14 @@ const CreateEmotion = () => {
         setUsername(res);
       }
     });
+
+
+    if(emotionList.find((x)=> x.date === routerparams.date)?.emo){
+      setSelectedMood(`assets/icon/emotion/${emotionList.find((x)=> x.date === routerparams.date)?.emo!}.svg`)
+      setSelectedMoodName(emotionList.find((x)=> x.date === routerparams.date)?.emo!)
+      setUserInput(emotionList.find((x)=> x.date === routerparams.date)?.text!)
+    }
+    
   }, []);
 
   return (

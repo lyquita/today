@@ -17,7 +17,6 @@ const Diary:React.FC<IProps> =({autoFocus, setAutoFocus, userInput, setUserInput
     
     useEffect(()=>{
         setFocus(autoFocus)
-        console.log(textareaRef.current?.setFocus())
     }, [autoFocus])
 
     return(

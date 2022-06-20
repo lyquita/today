@@ -33,6 +33,7 @@ import MonthlyTodoPage from './pages/MonthlyTodo/MonthlyTodoPage';
 import BacklogPage from './pages/Backlog/BacklogPage';
 import EmotionPage from './pages/Emotion/Emotion';
 import CreateEmotion from './pages/Emotion/CreateEmotion';
+import DiaryListPage from './pages/Emotion/DairyList';
 
 
 
@@ -57,7 +58,7 @@ const App: React.FC = () => (
         <Route exact path="/backlog" component={BacklogPage} />
         <Route exact path="/emotion" component={EmotionPage} />
         <Route exact path="/create-emotion/:date" component={CreateEmotion}  />
-
+        <Route exact path="/diary-list"  component={DiaryListPage} />
       </IonRouterOutlet>
     </IonReactRouter>
   </IonApp>

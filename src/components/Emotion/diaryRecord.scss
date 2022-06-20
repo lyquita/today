@@ -1,0 +1,25 @@
+#diary-records{
+
+    ion-item::part(native){
+        display: flex;
+        flex-direction: column;
+        padding: 1rem 0;
+    
+    }
+
+
+
+    ion-row{
+        width: 100%;
+        display: flex;
+        align-items: center;
+    }
+    ion-icon{
+        width: 25px;
+        height: 25px;
+    }
+
+    ion-text{
+        margin-bottom: 2rem;
+    }
+}

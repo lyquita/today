@@ -24,12 +24,9 @@ const EmotionPage = () => {
   const [value, setValue] = useState(moment());
   const history = useHistory<{ emotionList?: IEmotion[], prev?:string }>()
   const {state, dispatch} = useContext(AppContext);
-  const [emotionList, setEmotionList] = useState<IEmotion[]>([]);
 
- 
 
   useEffect(() => {
-    getEmotionList().then((res) => setEmotionList(res.data));
     dispatch({
       type: "update-emo",
       isUpdated: false
@@ -49,9 +46,9 @@ const EmotionPage = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
-        <CalendarComponent value={value} onChange={setValue} emotionList={emotionList} />      </IonContent>
+        <CalendarComponent value={value} onChange={setValue} />      </IonContent>
       <IonFab vertical="bottom" horizontal="center">
-        <IonFabButton onClick={() => history.push({pathname: `/create-emotion/${value.clone().format('yyyy-MM-DD')}`, state:{emotionList}}) } >
+        <IonFabButton onClick={() => history.push({pathname: `/create-emotion/${value.clone().format('yyyy-MM-DD')}`}) } >
           <IonIcon icon={add} />
         </IonFabButton>
       </IonFab>

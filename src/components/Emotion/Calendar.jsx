@@ -9,44 +9,57 @@ import {
 } from "@ionic/react";
 import { add } from "ionicons/icons";
 import moment, { Moment } from "moment";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import "./calendar.scss";
 import buildCalendar from "./buildCalendar";
 import Header from "./header";
 import { useHistory } from "react-router";
+import { AppContext } from "../../data/AppContext";
 
-
-
-const CalendarComponent = ({value, onChange, emotionList}) => {
+const CalendarComponent = ({ value, onChange }) => {
   const [calendar, setCalendar] = useState([]);
-  const history = useHistory()
-function isSelected(day,value){
-    return value.isSame(day, 'day')
+  const history = useHistory();
+  const {state, dispatch} = useContext(AppContext);
+  const emotionList = state.emotion.emotionList;
+  function isSelected(day, value) {
+    return value.isSame(day, "day");
   }
 
-function afterToday(day){
-    return day.isAfter(new Date(), 'day')
+  function afterToday(day) {
+    return day.isAfter(new Date(), "day");
   }
 
-
-  function isToday(day){
-    return day.isSame(new Date(), 'day')
+  function isToday(day) {
+    return day.isSame(new Date(), "day");
   }
 
-  function dayStyles(day, value){
-    if(Array.isArray(emotionList)){
-      if(emotionList.find(x=> x.date === moment(day).format('yyyy-MM-DD'))) return emotionList.find(x=> x.date === moment(day).format('yyyy-MM-DD')).emo
+  function dayStyles(day, value) {
+    if (Array.isArray(emotionList)) {
+      if (emotionList.find((x) => x.date === moment(day).format("yyyy-MM-DD")))
+        return emotionList.find(
+          (x) => x.date === moment(day).format("yyyy-MM-DD")
+        ).emo;
     }
-    if(afterToday(day)) return 'after'
-    if((isSelected(day,value))) return 'selected'
-    if(isToday(day)) return 'today'
-    return ''
+    if (afterToday(day)) return "after";
+    if (isSelected(day, value)) return "selected";
+    if (isToday(day)) return "today";
+    return "";
+  }
+
+  function handleClick(value) {
+
+    if (emotionList.find((x) => x.date === moment(value).format("yyyy-MM-DD")))
+      return history.push({pathname: '/diary-list', state:{emotionList}});
+    else {
+      history.push({
+        pathname: `/create-emotion/${value.clone().format("yyyy-MM-DD")}`,
+      });
+    }
   }
 
   useEffect(() => {
     setCalendar(buildCalendar(value));
   }, [value]);
-
 
   return (
     <div className="calendar">
@@ -59,7 +72,10 @@ function afterToday(day){
                 className="day"
                 onClick={() => !afterToday(day) && onChange(day)}
               >
-                <div className={dayStyles(day, value)} onClick={() => history.push({pathname: `/create-emotion/${day.clone().format('yyyy-MM-DD')}`, state:{emotionList}}) }>
+                <div
+                  className={dayStyles(day, value)}
+                  onClick={() => handleClick(day)}
+                >
                   {day.format("D").toString()}
                 </div>
               </div>

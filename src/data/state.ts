@@ -1,6 +1,11 @@
+import axios from "axios";
+import { axiosInstance } from "../config";
+import { getEmotionList, IEmotion } from "../services/emotion";
 import { combineReducers } from "./combineReducers";
 import { useEmoReducer } from "./emotion/emotion.reducer";
 import { useReducer } from "./user/user.reducer";
+
+
 
 
 export const initialState:AppState = {
@@ -8,7 +13,8 @@ export const initialState:AppState = {
         isLoggedin: false
     },
     emotion: {
-        isUpdated: false
+        isUpdated: false,
+        emotionList: []
     }
 }
 

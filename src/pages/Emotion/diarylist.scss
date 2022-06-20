@@ -1,4 +1,5 @@
-#emotion-page{
+#diary-list-page{
+
     padding: 20px;
     ion-header{
         ion-toolbar{
@@ -14,15 +15,5 @@
             }
 
         }
-    }
-    ion-fab{
-        ion-fab-button {
-            --background: #fcd8d4;
-            --box-shadow: none;
-            --border-radius: 20px;
-            --color: black;
-            font-size: 14px;
-            font-weight: 400;
-          }
     }
 }

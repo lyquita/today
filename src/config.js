@@ -10,6 +10,10 @@ import { refresh } from 'ionicons/icons';
 
 axios.defaults.baseURL = "https://api-blog.hireoo.fun/";
 
+export const axiosInstance = axios.create({
+    baseURL: 'https://api-blog.hireoo.fun/'
+})
+
 
 // check auth before send request
 axios.interceptors.request.use( async function(config){
@@ -20,7 +24,6 @@ axios.interceptors.request.use( async function(config){
 })
 
 axios.interceptors.response.use(response => {
-    console.log('respnse', response)
     return response
 
  }, async err => {
@@ -45,8 +48,6 @@ axios.interceptors.response.use(response => {
 
     return  Promise.reject(err)
 })
-
-
 
 
 
