@@ -15,12 +15,13 @@ import buildCalendar from "./buildCalendar";
 import Header from "./header";
 import { useHistory } from "react-router";
 import { AppContext } from "../../data/AppContext";
+import { getEmotionList } from "../../services/emotion";
 
 const CalendarComponent = ({ value, onChange }) => {
   const [calendar, setCalendar] = useState([]);
+  const [emotionList, setEmotionList] = useState([]);
   const history = useHistory();
   const {state, dispatch} = useContext(AppContext);
-  const emotionList = state.emotion.emotionList;
   function isSelected(day, value) {
     return value.isSame(day, "day");
   }
@@ -58,8 +59,15 @@ const CalendarComponent = ({ value, onChange }) => {
   }
 
   useEffect(() => {
+  if(state.emotion.emotionList){
+    setEmotionList(state.emotion.emotionList)
+  }else{
+    getEmotionList().then(res => setEmotionList(res.data))
+    .catch(err => console.log('err', err))
+  }
+
     setCalendar(buildCalendar(value));
-  }, [value]);
+  }, []);
 
   return (
     <div className="calendar">

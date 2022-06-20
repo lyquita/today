@@ -13,6 +13,7 @@ const {state, dispatch} = useContext(AppContext)
 const emotionList:IEmotion[] = state.emotion.emotionList;
 emotionList.sort((a,b) => +new Date(a.date) - +new Date(b.date))
 
+console.log('emotionList', emotionList)
 
 
     return(

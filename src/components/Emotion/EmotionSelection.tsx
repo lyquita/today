@@ -8,16 +8,17 @@ import "./emotionSelection.scss";
 interface IProps {
   handleClick: (value: string, url:string) => void;
   selectedMood: string | null;
+  setSelectedMood: (value:string ) => void;
 }
 
-const EmotionSelection: React.FC<IProps> = ({ handleClick, selectedMood }) => {
+const EmotionSelection: React.FC<IProps> = ({ handleClick, selectedMood , setSelectedMood}) => {
   console.log('selected', selectedMood);
   
   return (
     <>
       <div id="emotion-selection">
         {selectedMood ? (
-          <IonIcon icon={selectedMood}></IonIcon>
+          <IonIcon icon={selectedMood} onClick={()=> setSelectedMood('')}></IonIcon>
         ) : (
           <IonRow>
             {emotionGroup.map((item) => (

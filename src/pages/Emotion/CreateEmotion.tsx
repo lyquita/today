@@ -125,6 +125,7 @@ const CreateEmotion = () => {
         <EmotionSelection
           handleClick={handleClick}
           selectedMood={selectedMood}
+          setSelectedMood = {setSelectedMood}
         />
         {selectedMood ? (
           <Diary setAutoFocus={setAutoFocus} autoFocus={autoFocus} userInput={userInput} setUserInput={setUserInput} />

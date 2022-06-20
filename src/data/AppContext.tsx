@@ -14,14 +14,25 @@ export const AppContext = createContext<AppContextState>({
 
 export const AppContextProvider: React.FC = (props) => {
   const [store, dispatch] = useReducer(reducers, initialState);
+  const [emotionList, setEmotionList] = useState([])
+  const [renderFlag, setRenderFlag] = useState(false)
+  const [loading, setLoading] = useState<boolean>(true)
+
+
   useEffect(() => {
-    getEmotionList()
-      .then((res) => {
-        const emotionListArr = store.emotion.emotionList
-        emotionListArr.push.apply(emotionListArr, res.data);
-      })
-      .catch((err) => console.log("getEmotionList err", err));
-  }, []);
+    const emotionListArr = store.emotion.emotionList
+    const getList = async () =>{
+      const list = await getEmotionList()
+      if(list){
+        emotionListArr.push.apply(emotionListArr, list.data);
+      }
+      return emotionListArr
+    }
+
+    getList()
+  }, [store.user.isLoggedin]);
+
+
 
   return (
     <AppContext.Provider
