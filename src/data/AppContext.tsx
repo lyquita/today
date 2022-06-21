@@ -14,9 +14,6 @@ export const AppContext = createContext<AppContextState>({
 
 export const AppContextProvider: React.FC = (props) => {
   const [store, dispatch] = useReducer(reducers, initialState);
-  const [emotionList, setEmotionList] = useState([])
-  const [renderFlag, setRenderFlag] = useState(false)
-  const [loading, setLoading] = useState<boolean>(true)
 
 
   useEffect(() => {
@@ -24,13 +21,14 @@ export const AppContextProvider: React.FC = (props) => {
     const getList = async () =>{
       const list = await getEmotionList()
       if(list){
+        emotionListArr.length = 0
         emotionListArr.push.apply(emotionListArr, list.data);
       }
       return emotionListArr
     }
 
     getList()
-  }, [store.user.isLoggedin]);
+  }, [store.user.isLoggedin, store.emotion.isUpdated]);
 
 
 

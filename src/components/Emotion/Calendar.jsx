@@ -19,9 +19,9 @@ import { getEmotionList } from "../../services/emotion";
 
 const CalendarComponent = ({ value, onChange }) => {
   const [calendar, setCalendar] = useState([]);
-  const [emotionList, setEmotionList] = useState([]);
-  const history = useHistory();
   const {state, dispatch} = useContext(AppContext);
+  const [emotionList, setEmotionList] = useState(setTimeout(()=> state.emotion.emotionList, 500));
+  const history = useHistory();
   function isSelected(day, value) {
     return value.isSame(day, "day");
   }
@@ -34,17 +34,24 @@ const CalendarComponent = ({ value, onChange }) => {
     return day.isSame(new Date(), "day");
   }
 
+
   function dayStyles(day, value) {
-    if (Array.isArray(emotionList)) {
-      if (emotionList.find((x) => x.date === moment(day).format("yyyy-MM-DD")))
+
+      if (Array.isArray(emotionList)) {
+        if (emotionList.find((x) => x.date === moment(day).format("yyyy-MM-DD"))){
+          console.log('day', day, 'emo', emotionList.find(
+            (x) => x.date === moment(day).format("yyyy-MM-DD")
+          ).emo)  
         return emotionList.find(
-          (x) => x.date === moment(day).format("yyyy-MM-DD")
-        ).emo;
-    }
-    if (afterToday(day)) return "after";
-    if (isSelected(day, value)) return "selected";
-    if (isToday(day)) return "today";
-    return "";
+            (x) => x.date === moment(day).format("yyyy-MM-DD")
+          ).emo;}
+      }
+      if (afterToday(day)) return "after";
+      if (isSelected(day, value)) return "selected";
+      if (isToday(day)) return "today";
+      return "";
+
+   
   }
 
   function handleClick(value) {
@@ -59,15 +66,23 @@ const CalendarComponent = ({ value, onChange }) => {
   }
 
   useEffect(() => {
-  if(state.emotion.emotionList){
-    setEmotionList(state.emotion.emotionList)
-  }else{
-    getEmotionList().then(res => setEmotionList(res.data))
-    .catch(err => console.log('err', err))
-  }
+    
+    if(state.emotion.emotionList){
+      setTimeout(() => {
+        
+        setEmotionList(state.emotion.emotionList)
 
+      }, 500);
+    }else{
+      getEmotionList().then(res => {setEmotionList(res.data);console.log('getnew ', emotionList)})
+      .catch(err => console.log('err', err))
+    }
+    
     setCalendar(buildCalendar(value));
-  }, []);
+  }, [value, state.emotion.isUpdated]);
+
+
+  console.log('state update', state.emotion.isUpdated)
 
   return (
     <div className="calendar">
@@ -79,6 +94,7 @@ const CalendarComponent = ({ value, onChange }) => {
               <div
                 className="day"
                 onClick={() => !afterToday(day) && onChange(day)}
+                key={day}
               >
                 <div
                   className={dayStyles(day, value)}

@@ -57,18 +57,14 @@ const Home: React.FC = () => {
         if (res) {
           getUsername(res)
             .then((m) => {
-              console.error("2");
               if (m.data.username) {
-                console.error("3");
                 setUsername(m.data.username);
                 setStorage("username", m.data.username);
               } else {
-                console.error("4");
               }
             })
             .catch((err) => console.error("get username failed " + err));
         } else {
-          console.error("1");
           setUsername("");
         }
       })

@@ -12,7 +12,6 @@ interface IProps {
 }
 
 const EmotionSelection: React.FC<IProps> = ({ handleClick, selectedMood , setSelectedMood}) => {
-  console.log('selected', selectedMood);
   
   return (
     <>

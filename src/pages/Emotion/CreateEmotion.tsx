@@ -44,8 +44,6 @@ const CreateEmotion = () => {
 
 
   function handleClick(value: string, url: string) {
-    console.log("eee", history.location.state);
-    console.log("value", value);
     setSelectedMood(url);
     setSelectedMoodName(value);
     setAutoFocus(true);
@@ -64,6 +62,8 @@ const CreateEmotion = () => {
           text: userInput
         };
         updateEmotion(id, params).then((res) => {
+          console.log('updateEmotion');
+          
           dispatch({
             type: "update-emo",
             isUpdated: true,

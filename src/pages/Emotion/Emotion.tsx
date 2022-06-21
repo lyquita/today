@@ -27,10 +27,10 @@ const EmotionPage = () => {
 
 
   useEffect(() => {
-    dispatch({
-      type: "update-emo",
-      isUpdated: false
-    })
+    // dispatch({
+    //   type: "update-emo",
+    //   isUpdated: false
+    // })
   }, [state.emotion.isUpdated])
 
 
