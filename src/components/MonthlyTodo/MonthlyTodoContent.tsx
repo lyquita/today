@@ -2,15 +2,10 @@ import {
   IonButton,
   IonCard,
   IonCol,
-  IonIcon,
   IonItem,
   IonList,
   IonRow,
-  IonTabBar,
-  IonTabButton,
-  IonTabs,
   IonText,
-  IonTitle,
 } from "@ionic/react";
 import moment from "moment";
 import { useEffect, useState } from "react";
@@ -74,7 +69,6 @@ const MonthlyTodoContent:React.FC<IProps> = ({month, date}) => {
 
         // sort list by date
         expectedData.sort((a,b) => +new Date(a.created_date) - +new Date(b.created_date))
-        console.log('exo', expectedData);
     
 
         for( let m = 0; m < expectedData.length; m++){
@@ -100,7 +94,6 @@ const MonthlyTodoContent:React.FC<IProps> = ({month, date}) => {
         setSecondWeekList(secondWeekArr);
         setThirdWeekList(thirdWeekArr);
         setForthWeekList(forthWeekArr);
-        console.log('first', firstWeekArr, secondWeekArr);
         
         if(parseInt(today) <= 7){
           setListData(firstWeekArr)

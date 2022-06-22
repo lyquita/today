@@ -12,7 +12,6 @@ import React, { useContext, useEffect, useState } from "react";
 import "./login.scss";
 import { postLogin } from "../../services/login";
 import jwt_decode from "jwt-decode";
-import { Storage } from "@capacitor/storage";
 import { useHistory } from "react-router";
 import { AppContext } from "../../data/AppContext";
 import { setIsLoggedInData, setStorage } from "../../services/localStorage";
@@ -28,7 +27,6 @@ const LoginComponent: React.FC = () => {
   const history = useHistory();
 
   useEffect(() => {
-    console.log("effect", showLoginSuccess);
   }, [showLoginSuccess, setShowPasswordError]);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -63,7 +61,6 @@ const LoginComponent: React.FC = () => {
     }
   };
 
-  console.log("show login", showLoginSuccess);
 
   return (
     <div className="mt-10 flex flex-col items-center" id="login-component">

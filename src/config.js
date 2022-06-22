@@ -30,7 +30,6 @@ axios.interceptors.response.use(response => {
     const originalRequest = err.config;
     const refreshToken = await getStorage('refresh_token');
 
-    console.log(err);
 
     if( err.response.status === 401 && err.response.statusText === 'Unauthorized'){
         return axios.post('users/token/refresh/', {refresh: refreshToken}).then(

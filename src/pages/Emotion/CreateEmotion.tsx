@@ -62,7 +62,6 @@ const CreateEmotion = () => {
           text: userInput
         };
         updateEmotion(id, params).then((res) => {
-          console.log('updateEmotion');
           
           dispatch({
             type: "update-emo",

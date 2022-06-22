@@ -1,8 +1,5 @@
 import { IonButton, IonCol, IonIcon, IonRow } from "@ionic/react";
-import { useEffect, useState } from "react";
-import { useHistory, useParams } from "react-router";
-import { emotionGroup, IEmotion, postNewEmotion } from "../../services/emotion";
-import { getStorage } from "../../services/localStorage";
+import { emotionGroup } from "../../services/emotion";
 import "./emotionSelection.scss";
 
 interface IProps {

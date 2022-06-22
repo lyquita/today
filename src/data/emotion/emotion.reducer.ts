@@ -6,7 +6,6 @@ export function useEmoReducer(state: EmotionState, action:EmotionActions){
 
     switch (action.type) {
         case 'update-emo':
-            console.log('update', action.isUpdated)
             return {...state, isUpdated: action.isUpdated}
     }
 

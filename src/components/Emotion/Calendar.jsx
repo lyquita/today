@@ -81,9 +81,6 @@ const CalendarComponent = ({ value, onChange }) => {
     setCalendar(buildCalendar(value));
   }, [value, state.emotion.isUpdated]);
 
-
-  console.log('state update', state.emotion.isUpdated)
-
   return (
     <div className="calendar">
       <Header value={value} onChange={onChange} />

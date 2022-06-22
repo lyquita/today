@@ -7,8 +7,6 @@ export interface EmotionState {
 
 export const emotionListState = async () =>{
  const emotionList =  await getEmotionList()
- 
- console.log('emo', emotionList)
  return emotionList
 
 }

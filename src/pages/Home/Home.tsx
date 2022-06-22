@@ -121,11 +121,9 @@ const Home: React.FC = () => {
   }
 
   function doRefresh(event: CustomEvent<RefresherEventDetail>) {
-    console.log("Begin async operation");
     setRenderFlag(!renderFlag);
 
     setTimeout(() => {
-      console.log("Async operation has ended");
       event.detail.complete();
     }, 2000);
   }

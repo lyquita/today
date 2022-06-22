@@ -1,36 +1,17 @@
-import { Storage } from "@capacitor/storage";
 import {
-  IonActionSheet,
   IonButton,
-  IonCard,
-  IonCheckbox,
   IonFooter,
-  IonIcon,
-  IonInput,
   IonItem,
   IonItemOption,
   IonItemOptions,
   IonItemSliding,
   IonLabel,
-  IonList,
   IonListHeader,
-  IonReorder,
-  IonReorderGroup,
   IonText,
-  IonTextarea,
   IonToolbar,
-  ItemReorderEventDetail,
 } from "@ionic/react";
-import {
-  heart,
-  trash,
-  star,
-  archive,
-  ellipsisHorizontal,
-  ellipsisVertical,
-} from "ionicons/icons";
 import moment from "moment";
-import { Ref, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router";
 import { postNewBacklog } from "../../services/backlog";
 import { getStorage } from "../../services/localStorage";
@@ -190,7 +171,6 @@ const Todolist: React.FC = () => {
   }
 
   function handleEdit(value: number) {
-    console.log("clicked", inputRef);
     inputRef.current?.setFocus();
 
     let editedTodo = todos.find((X) => X.id === value);

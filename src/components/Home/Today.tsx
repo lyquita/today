@@ -1,5 +1,4 @@
 import {
-  IonButton,
   IonCol,
   IonIcon,
   IonItem,
@@ -9,13 +8,8 @@ import {
 } from "@ionic/react";
 import { useContext, useEffect, useState } from "react";
 import "./today.scss";
-import { Storage } from "@capacitor/storage";
-import { getUsername } from "../../services/login";
-import { clearStorage, getStorage } from "../../services/localStorage";
+import { clearStorage } from "../../services/localStorage";
 import { AppContext } from "../../data/AppContext";
-import { getTodolistByDate, ITodo } from "../../services/todolist";
-import moment from "moment";
-import { Alert } from "../../services/alert";
 import { useHistory } from "react-router";
 
 interface IProps {

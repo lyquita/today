@@ -51,7 +51,6 @@ const MonthlyTodoPage = () => {
             onClick={() => {
               setMonth(selectedMonth!);
               setShowPopover(false);
-              console.log("selected", selectedMonth);
             }}
           >
             Save

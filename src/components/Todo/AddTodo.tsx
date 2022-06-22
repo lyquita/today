@@ -1,5 +1,4 @@
-import { IonButton, IonIcon, IonInput, IonLabel } from "@ionic/react";
-import { RefObject, useState } from "react";
+import { IonButton, IonIcon, IonInput } from "@ionic/react";
 import './addtodo.scss';
 
 interface Props {

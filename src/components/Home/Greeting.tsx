@@ -1,10 +1,4 @@
 import { IonText } from "@ionic/react";
-import { useContext, useEffect, useState } from "react";
-import moment from "moment";
-import { getStorage } from "../../services/localStorage";
-import { getUsername } from "../../services/login";
-import { Storage } from "@capacitor/storage";
-import { AppContext } from "../../data/AppContext";
 
 interface IProps{
   username: string,

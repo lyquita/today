@@ -1,25 +1,15 @@
 import {
-  IonActionSheet,
   IonButton,
   IonButtons,
-  IonCard,
-  IonCheckbox,
-  IonCol,
-  IonContent,
   IonDatetime,
   IonIcon,
-  IonInput,
   IonItem,
   IonItemOption,
   IonItemOptions,
   IonItemSliding,
   IonLabel,
   IonList,
-  IonListHeader,
-  IonModal,
   IonPopover,
-  IonRow,
-  IonText,
 } from "@ionic/react";
 import { useEffect, useRef, useState } from "react";
 import {
@@ -31,23 +21,18 @@ import {
 } from "../../services/backlog";
 import Addbacklog from "./Addbacklog";
 import "./backlogList.scss";
-import { Storage } from "@capacitor/storage";
 import moment from "moment";
 import { ITodo, postNewTodo } from "../../services/todolist";
 import { getStorage } from "../../services/localStorage";
 import { Alert } from "../../services/alert";
 
 const BacklogList = () => {
-  const [showModal, setShowModal] = useState(false);
-  const [showDatePicker, setShowDatePicker] = useState(false);
   const [backlogList, setBackloglist] = useState<IBacklog[]>([]);
   const [inputValue, setInputvalue] = useState<string>("");
   const [username, setUsername] = useState<string>("");
-  const [showActionSheet, setShowActionSheet] = useState(false);
   const [renderFlag, setRenderflag] = useState<boolean>(false);
   const [targetBacklog, setTargetBacklog] = useState<number>(0);
   const [editId, setEditid] = useState<number>(0);
-  const [editInputValue, setEditInputValue] = useState<string>("");
   const [showPopover, setShowpopover] = useState<boolean>(false);
   const [selectedDate, setSelectedDate] = useState<string>("");
   const [showNewTodoAlert, setShowNewTodoAlert] = useState<boolean>(false);
